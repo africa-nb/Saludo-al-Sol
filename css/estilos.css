@@ -1,0 +1,139 @@
+/* =====================================================
+   SALUDO AL SOL
+   Hoja de estilos principal
+   Autora: África Núñez Bazán
+   Versión: 2.0.0
+===================================================== */
+
+/* ---------- Variables globales ---------- */
+
+:root {
+
+    --color-fondo: #f8f5ef;
+    --color-principal: #e76f51;
+    --color-secundario: #f4a261;
+    --color-acento: #2a9d8f;
+
+    --color-texto: #333333;
+    --color-blanco: #ffffff;
+    --color-borde: #dddddd;
+
+    --radio: 12px;
+
+    --sombra:
+        0 6px 18px rgba(0,0,0,.15);
+
+    --transicion: .30s;
+
+    --fuente:
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+/* ---------- Reset ---------- */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* ---------- Página ---------- */
+
+body{
+
+    background:var(--color-fondo);
+
+    color:var(--color-texto);
+
+    font-family:var(--fuente);
+
+    min-height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+/* ---------- Cabecera ---------- */
+
+header{
+
+    background:var(--color-principal);
+
+    color:white;
+
+    text-align:center;
+
+    padding:30px;
+
+    box-shadow:var(--sombra);
+
+}
+
+header h1{
+
+    font-size:2.6rem;
+
+    margin-bottom:10px;
+
+}
+
+.subtitulo{
+
+    font-size:1.1rem;
+
+    opacity:.9;
+
+}
+
+/* ---------- Contenido ---------- */
+
+main{
+
+    flex:1;
+
+    width:min(1200px,95%);
+
+    margin:auto;
+
+    padding:30px;
+
+}
+
+/* ---------- Secciones ---------- */
+
+section{
+
+    background:white;
+
+    border-radius:var(--radio);
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    box-shadow:var(--sombra);
+
+    min-height:120px;
+
+}
+
+/* ---------- Pie ---------- */
+
+footer{
+
+    background:#222;
+
+    color:white;
+
+    text-align:center;
+
+    padding:20px;
+
+    font-size:.9rem;
+
+}

@@ -1,0 +1,86 @@
+/* =====================================================
+   SALUDO AL SOL
+   Animaciones
+   Autora: África Núñez Bazán
+   Versión: 2.0.0
+===================================================== */
+
+/* ---------- Aparición suave ---------- */
+
+@keyframes aparecer {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+/* ---------- Desvanecer ---------- */
+
+@keyframes desvanecer {
+
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+
+}
+
+/* ---------- Pulso ---------- */
+
+@keyframes pulso {
+
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+/* ---------- Giro suave ---------- */
+
+@keyframes girar {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+/* ---------- Clases reutilizables ---------- */
+
+.animar-aparecer {
+    animation: aparecer .6s ease;
+}
+
+.animar-desvanecer {
+    animation: desvanecer .4s ease;
+}
+
+.animar-pulso {
+    animation: pulso 1.5s infinite;
+}
+
+.animar-girar {
+    animation: girar 2s linear infinite;
+}
