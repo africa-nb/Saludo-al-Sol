@@ -1,0 +1,53 @@
+#settings-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:5000;
+
+}
+
+#settings-window{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:30px;
+
+    width:360px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+
+}
+
+#settings-window h2{
+
+    margin-top:0;
+
+    text-align:center;
+
+}
+
+#breathing-options{
+
+    margin:20px 0;
+
+}
+
+.settings-buttons{
+
+    display:flex;
+
+    justify-content:space-between;
+
+}

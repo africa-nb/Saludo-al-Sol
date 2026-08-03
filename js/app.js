@@ -2,60 +2,45 @@
  * =====================================================
  * SALUDO AL SOL
  * Archivo principal de la aplicación
- *
- * Autora: África Núñez Bazán
- * Desarrollo asistido por ChatGPT
- * Versión: 2.0.0
  * =====================================================
  */
 
 "use strict";
 
-/**
- * Clase principal de la aplicación
- */
-class SaludoAlSol {
+import { crearReloj } from "./modules/clock.js";
+import { crearPosturas, siguientePostura } from "./modules/postures.js";
+import { iniciarSesion } from "./modules/session.js";
+import { abrirConfiguracion } from "./modules/settingsDialog.js";
+import { crearToolbar } from "./modules/toolbar.js";
+import { SETTINGS } from "../data/settings.js";
+import { cargarConfiguracion } from "./utils/storage.js";
 
-    constructor() {
 
-        console.log("====================================");
-        console.log("☀️ SALUDO AL SOL");
-        console.log("Versión 2.0.0");
-        console.log("Autora: África Núñez Bazán");
-        console.log("Aplicación iniciada correctamente.");
-        console.log("====================================");
+console.log("APP CARGADA");
 
-        this.inicializar();
 
-    }
-
-    inicializar() {
-
-        this.inicializarInterfaz();
-        this.cargarConfiguracion();
-
-    }
-
-    inicializarInterfaz() {
-
-        console.log("✔ Interfaz preparada.");
-
-    }
-
-    cargarConfiguracion() {
-
-        console.log("✔ Configuración cargada.");
-
-    }
-
-}
-
-/**
- * Esperar a que el documento esté listo
- */
-
+/* Inicialización de la aplicación */
 document.addEventListener("DOMContentLoaded", () => {
 
-    new SaludoAlSol();
+    console.log(document.getElementById("clock-svg"));
+    console.log(document.getElementById("postures"));
+
+    // Cargar configuración guardada
+    const configuracion = cargarConfiguracion();
+    if (configuracion) {
+
+        Object.assign(
+            SETTINGS,
+            configuracion
+        );
+
+    }
+
+    // Crear la interfaz de usuario
+    crearToolbar();
+    crearReloj();
+    crearPosturas();
+    iniciarSesion();
+    
 
 });

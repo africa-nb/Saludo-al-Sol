@@ -1,0 +1,130 @@
+/* ==========================================================
+   LAYOUT GENERAL
+   Proyecto: Saludo-al-Sol
+   ========================================================== */
+
+:root{
+    --header-height:80px;
+    --toolbar-height:70px;
+    --footer-height:60px;
+
+    --max-width:1600px;
+
+    --background:#fdfbf7;
+
+    --surface:#ffffff;
+
+    --border:#eadfca;
+
+    --shadow:0 12px 28px rgba(0,0,0,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    margin:0;
+
+    min-height:100vh;
+
+    font-family:"Outfit",sans-serif;
+
+    background:var(--background);
+
+    color:#2d2623;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+#app{
+
+    width:min(100%,var(--max-width));
+
+    margin:auto;
+
+    padding:24px;
+
+    display:grid;
+
+    gap:24px;
+
+}
+
+header{
+
+    width:100%;
+
+    min-height:var(--header-height);
+
+}
+
+nav{
+
+    width:100%;
+
+    min-height:var(--toolbar-height);
+
+}
+
+footer{
+
+    width:100%;
+
+    min-height:var(--footer-height);
+
+}
+
+#status-panel,
+
+#timer-panel,
+
+#cycle-counter,
+
+#statistics-panel,
+
+#breathing-panel,
+
+#speech-panel{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+    padding:20px;
+
+}
+
+#clock-container{
+
+    position:relative;
+
+    width:100%;
+
+    aspect-ratio:1;
+
+    max-width:980px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:white;
+
+    border:2px solid var(--border);
+
+    box-shadow:var(--shadow);
+
+}

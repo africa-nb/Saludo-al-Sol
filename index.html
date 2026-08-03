@@ -2,75 +2,133 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Aplicación interactiva para la práctica del Saludo al Sol (Surya Namaskar).">
+
+    <meta name="theme-color"
+          content="#D97706">
 
     <title>Saludo al Sol</title>
 
-    <meta name="description" content="Guía interactiva de Surya Namaskar">
-    <meta name="author" content="África Núñez Bazán">
-    <meta name="theme-color" content="#f4a261">
+    <!-- Google Fonts -->
 
-    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
 
-    <!-- Icono de la aplicación -->
-    <link rel="icon" href="assets/iconos/favicon.ico">
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
 
-    <!-- Estilos -->
-    <link rel="stylesheet" href="css/estilos.css">
-    <link rel="stylesheet" href="css/componentes.css">
-    <link rel="stylesheet" href="css/animaciones.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Tailwind -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/variables.css">
+    <link rel="stylesheet" href="./css/fonts.css">
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/toolbar.css">
+    <link rel="stylesheet" href="./css/panels.css">
+    <link rel="stylesheet" href="./css/clock.css">
+    <link rel="stylesheet" href="./css/posture-card.css">
+    <link rel="stylesheet" href="./css/animations.css">
+    <link rel="stylesheet" href="./css/dialogs.css">
+    <link rel="stylesheet" href="./css/footer.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+
 </head>
 
 <body>
 
-    <!-- Cabecera -->
-    <header class="cabecera">
+    <!-- CABECERA -->
 
-        <h1>☀️ Saludo al Sol</h1>
+    <header id="header"></header>
 
-        <p class="subtitulo">
-            Guía interactiva de Surya Namaskar
-        </p>
+    <!-- BARRA DE HERRAMIENTAS -->
 
-    </header>
+    <nav id="toolbar"></nav>
 
-    <!-- Contenido principal -->
-    <main>
+    <!-- CONTENIDO PRINCIPAL -->
 
-        <!-- Panel superior -->
-        <section id="panelSuperior">
+    <main id="app">
 
-        </section>
+        <!-- PANEL SUPERIOR -->
 
-        <!-- Zona de práctica -->
-        <section id="practica">
+        <section id="status-panel"></section>
 
-        </section>
+        <!-- CRONÓMETRO -->
 
-        <!-- Panel inferior -->
-        <section id="panelInferior">
+        <section id="timer-panel"></section>
+
+        <!-- CONTADOR -->
+
+        <section id="cycle-counter"></section>
+
+        <!-- ESTADÍSTICAS -->
+
+        <section id="statistics-panel"></section>
+
+        <!-- RESPIRACIÓN -->
+
+        <section id="breathing-panel"></section>
+
+        <!-- VOZ -->
+
+        <section id="speech-panel"></section>
+
+        <!-- RELOJ -->
+
+        <section id="clock-container">
+
+            <!-- CENTRO -->
+
+            <div id="sun-center">
+
+                <div id="sun-icon">☀️</div>
+
+                <h2>Saludo al Sol</h2>
+
+                <p>Surya Namaskar</p>
+
+                <span>11 posturas</span>
+
+            </div>
+
+            <!-- SVG -->
+
+            <svg id="clock-svg"></svg>
+
+            <!-- POSTURAS -->
+
+            <div id="postures"></div>
 
         </section>
 
     </main>
 
-    <!-- Pie -->
-    <footer>
+    <!-- DIÁLOGOS -->
 
-        <p>
-            Saludo al Sol v2.0.0
-        </p>
+    <div id="dialogs"></div>
 
-        <p>
-            © 2026 África Núñez Bazán
-        </p>
+    <!-- PIE -->
 
-    </footer>
+    <footer id="footer"></footer>
 
-    <!-- JavaScript -->
-    <script type="module" src="js/app.js"></script>
+    <!-- APP -->
+
+    <script type="module" src="./js/app.js"></script>
 
 </body>
 
