@@ -1,0 +1,51 @@
+/* =====================================================
+   DESIGN SYSTEM
+===================================================== */
+
+:root{
+
+    /* Colores */
+
+    --color-primary:#D97706;
+    --color-primary-light:#F3B347;
+
+    --color-background:#F8F5EF;
+
+    --color-surface:#FFFFFF;
+
+    --color-text:#2D2D2D;
+
+    --color-text-soft:#777777;
+
+    --color-border:#E5C27B;
+
+    --color-active:#DB7706;
+
+
+    /* Radios */
+
+    --radius-small:12px;
+    --radius-medium:20px;
+    --radius-large:32px;
+    --radius-round:999px;
+
+    /* Sombras */
+
+    --shadow-small:
+        0 4px 10px rgba(0,0,0,.08);
+
+    --shadow-medium:
+        0 10px 25px rgba(0,0,0,.12);
+
+    --shadow-large:
+        0 20px 45px rgba(0,0,0,.18);
+
+    /* Animaciones */
+
+    --transition-fast:.20s;
+
+    --transition-normal:.35s;
+
+    --transition-slow:.60s;
+
+}

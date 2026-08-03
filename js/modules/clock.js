@@ -11,6 +11,17 @@ const CENTER = 500;
 const RADIUS = 420;
 const MARKER_RADIUS = 130;
 const TOTAL = 11;
+const css = getComputedStyle(document.documentElement);
+
+const COLOR_BORDER =
+    css.getPropertyValue("--color-border").trim();
+
+const COLOR_PRIMARY =
+    css.getPropertyValue("--color-primary").trim();
+
+const COLOR_ACTIVE =
+    css.getPropertyValue("--color-active").trim();
+
 
 let marker = null;
 
@@ -25,12 +36,10 @@ export function crearReloj() {
     if (!svg) {
 
         console.error("No existe el elemento #clock-svg");
-
         return;
 
     }
 
-    
     // Limpiar por si volvemos a dibujar
     svg.innerHTML = "";
 
@@ -51,7 +60,7 @@ export function crearReloj() {
     circle.setAttribute("r", RADIUS);
 
     circle.setAttribute("fill", "none");
-    circle.setAttribute("stroke", "#E5C27B");
+    circle.setAttribute("stroke", COLOR_BORDER);
     circle.setAttribute("stroke-width", "3");
 
     svg.appendChild(circle);
@@ -75,7 +84,7 @@ export function crearReloj() {
         mark.setAttribute("cx", x);
         mark.setAttribute("cy", y);
         mark.setAttribute("r", "8");
-        mark.setAttribute("fill", "#D97706");
+        mark.setAttribute("fill", COLOR_BORDER);
 
         svg.appendChild(mark);
 
@@ -89,20 +98,16 @@ export function crearReloj() {
         "http://www.w3.org/2000/svg",
         "circle"
     );
-    /* marker.style.filter =
-    "drop-shadow(0 0 6px rgba(239,68,68,.9)) " +
-    "drop-shadow(0 0 12px rgba(239,68,68,.6))"; */
-    
+
     marker.setAttribute("id", "active-marker");
 
     marker.setAttribute("cx", CENTER);
     marker.setAttribute("cy", CENTER - MARKER_RADIUS);
 
-    marker.setAttribute("r", "10");
+    marker.setAttribute("r", "8");
 
-    marker.setAttribute("fill", "#EF4444");
-    marker.setAttribute("stroke", "#FFFFFF");
-    marker.setAttribute("stroke-width", "4");
+    marker.setAttribute("fill", COLOR_ACTIVE);
+    marker.setAttribute("stroke", "none");
 
     svg.appendChild(marker);
 

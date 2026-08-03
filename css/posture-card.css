@@ -18,13 +18,13 @@
 
     transform:translate(-50%,-50%);
 
-    background:white;
+    background:var(--color-surface);
 
-    border-radius:18px;
+    border-radius:var(--radius-medium);
 
     padding:12px;
 
-    box-shadow:0 10px 25px rgba(0,0,0,.12);
+    box-shadow:var(--shadow-medium);
 
     text-align:center;
 
@@ -37,6 +37,7 @@
     transform:translate(-50%,-50%) scale(1.05);
 
 }
+
 
 .posture-number{
 
@@ -138,5 +139,87 @@
 .posture-card.active{
 
     opacity:1;
+
+}
+
+.breathing-label{
+
+    margin-top:8px;
+
+    padding:6px 10px;
+
+    border-radius:999px;
+
+    font-size:.82rem;
+
+    font-weight:700;
+
+    letter-spacing:.05em;
+
+    text-align:center;
+
+}
+
+.breathing-inhale{
+
+    background:#DBEAFE;
+
+    color:#1D4ED8;
+
+}
+
+.breathing-exhale{
+
+    background:#DCFCE7;
+
+    color:#15803D;
+
+}
+
+.breathing-hold{
+
+    background:#EDE9FE;
+
+    color:#6D28D9;
+
+}
+.posture-header{
+
+    font-size:.78rem;
+
+    font-weight:600;
+
+    color:var(--color-text-secondary);
+
+    text-align:center;
+
+    margin-bottom:8px;
+
+}
+
+.posture-card.active.resp-inhale{
+
+    background:#EFF6FF;
+
+}
+
+.posture-card.active.resp-exhale{
+
+    background:#F0FDF4;
+
+}
+
+.posture-card.active.resp-hold{
+
+    background:#F5F3FF;
+
+}
+
+.posture-card{
+
+    transition:
+        background-color .35s ease,
+        transform .35s ease,
+        box-shadow .35s ease;
 
 }

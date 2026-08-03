@@ -1,0 +1,149 @@
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+#toolbar{
+
+    width:min(460px,92%);
+
+    margin:12px auto;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:14px 24px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.55);
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.45);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.12),
+        inset 0 1px rgba(255,255,255,.75);
+
+}
+
+.toolbar-group{
+
+    display:flex;
+
+    gap:18px;
+
+    align-items:center;
+
+}
+
+.toolbar-button{
+
+    width:58px;
+
+    height:58px;
+
+    border:none;
+
+    border-radius:var(--radius-round);
+
+    background:var(--color-surface);
+
+    color:var(--color-primary);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    transition:all .25s ease;
+
+    box-shadow:var(--shadow-medium);
+
+}
+
+.toolbar-button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 14px 28px rgba(0,0,0,.18);
+
+}
+
+.toolbar-button:active{
+
+    transform:scale(.92);
+
+}
+
+.toolbar-button:disabled{
+
+    opacity:.35;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+    box-shadow:none;
+
+}
+
+.toolbar-icon{
+
+    width:28px;
+
+    height:28px;
+
+    fill:currentColor;
+
+    transition:transform .35s;
+
+}
+
+#btn-settings:hover .toolbar-icon{
+
+    transform:rotate(90deg);
+
+}
+
+.toolbar-icon{
+
+    width:28px;
+    height:28px;
+
+    fill:currentColor;
+
+    transition:
+        transform .18s ease,
+        opacity .18s ease;
+
+}
+
+.toolbar-button:active .toolbar-icon{
+
+    transform:scale(.82);
+
+}
+
+.toolbar-button:hover .toolbar-icon{
+
+    transform:scale(1.08);
+
+}
+
+.toolbar-button{
+
+    transition:
+        opacity .15s ease,
+        transform .25s ease;
+
+}

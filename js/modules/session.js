@@ -1,43 +1,120 @@
 /**
  * =====================================================
- * MÓDULO DE SESIÓN
- * Controla el desarrollo de una práctica
+ * MOTOR DE SESIÓN
  * =====================================================
  */
 
 "use strict";
 
-import { siguientePostura } from "./postures.js";
 import { SETTINGS } from "../../data/settings.js";
+import {
+    siguientePostura,
+    reiniciarPosturas
+} from "./postures.js";
+
+/* ==========================================
+   ESTADOS
+========================================== */
+
+export const SESSION_STATE = {
+
+    STOPPED: "STOPPED",
+    RUNNING: "RUNNING",
+    PAUSED: "PAUSED"
+
+};
+
+/* ==========================================
+   VARIABLES
+========================================== */
+
+let estado = SESSION_STATE.STOPPED;
 
 let temporizador = null;
 
+/* ==========================================
+   SESIÓN
+========================================== */
+
 export function iniciarSesion() {
 
-    detenerSesion();
+    if (estado === SESSION_STATE.RUNNING)
+        return;
 
-    temporizador = setTimeout(avanzar, SETTINGS.breathingTime * 1000);
+    console.log("▶ Sesión iniciada");
+
+    estado = SESSION_STATE.RUNNING;
+
+    avanzar();
 
 }
+
+export function pausarSesion() {
+
+    if (estado !== SESSION_STATE.RUNNING)
+        return;
+
+    estado = SESSION_STATE.PAUSED;
+
+    clearTimeout(temporizador);
+
+    console.log("⏸ Sesión pausada");
+
+}
+
+export function finalizarSesion() {
+
+    clearTimeout(temporizador);
+
+    estado = SESSION_STATE.STOPPED;
+    
+    reiniciarPosturas();
+
+    console.log("■ Sesión finalizada");
+
+}
+
+export function reanudarSesion() {
+
+    if (estado !== SESSION_STATE.PAUSED)
+        return;
+
+    console.log("▶ Reanudar");
+
+    estado = SESSION_STATE.RUNNING;
+
+    avanzar();
+
+}
+
+/* ==========================================
+   BUCLE
+========================================== */
 
 function avanzar() {
 
+    if (estado !== SESSION_STATE.RUNNING)
+        return;
+
     siguientePostura();
 
-    temporizador = setTimeout(avanzar, SETTINGS.breathingTime * 1000);
+    temporizador = setTimeout(
+
+        avanzar,
+
+        SETTINGS.breathingTime * 1000
+
+    );
 
 }
 
-export function detenerSesion() {
+/* ==========================================
+   CONSULTA
+========================================== */
 
-    if (temporizador !== null) {
+export function obtenerEstadoSesion() {
 
-        clearTimeout(temporizador);
-
-        temporizador = null;
-
-    }
+    return estado;
 
 }
-
 
