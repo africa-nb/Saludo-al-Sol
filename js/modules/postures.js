@@ -8,6 +8,8 @@
 
 import { POSTURES } from "../../data/postures.js";
 import { moverMarcador } from "./clock.js";
+import { incrementarCiclos } from "./cycleCounter.js";
+import { EVENTS } from "./events.js";
 
 
 /* ==========================================
@@ -52,6 +54,43 @@ function obtenerIndicacionRespiracion(tipo){
 
 }
 
+export function notificarCambioPostura() {
+
+    const postura = POSTURES[posturaActiva];
+
+    if (!postura) return;
+
+    console.log(
+        "📢 Emitiendo POSTURE_CHANGED:",
+        postura.name,
+        postura.breathing
+    );
+
+    document.dispatchEvent(
+
+        new CustomEvent(
+
+            EVENTS.POSTURE_CHANGED,
+
+            {
+
+                detail: {
+
+                    indice: posturaActiva,
+
+                    postura: postura.name,
+
+                    respiracion: postura.breathing
+
+                }
+
+            }
+
+        )
+
+    );
+
+}
 /* ==========================================
    CREACIÓN DE LAS POSTURAS
 ========================================== */
@@ -159,12 +198,15 @@ export function activarPostura(indice){
     const actual = tarjetas[indice];
 
     posicionarTarjeta(actual,Number(actual.dataset.angle),ACTIVE_RADIUS);
+    
     actual.classList.add("active");
     actual.classList.add(`resp-${POSTURES[indice].breathing}`);
 
     posturaActiva = indice;
 
     moverMarcador(indice);
+
+    notificarCambioPostura();
 
 }
 
@@ -174,6 +216,7 @@ export function siguientePostura() {
 
     if (siguiente >= tarjetas.length) {
 
+        incrementarCiclos();
         siguiente = 0;
 
     }

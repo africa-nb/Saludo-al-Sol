@@ -11,7 +11,7 @@ export const SETTINGS = {
     // Duración de una respiración (segundos)
     breathingTime: 4,
 
-    // Valores permitidos
+    // Valores permitidos para la duración de la respiración
     breathingOptions: [
         2,
         3,
@@ -36,6 +36,18 @@ export const SETTINGS = {
     countdown: true,
 
     // Número de ciclos (0 = infinito)
-    totalCycles: 0
+    totalCycles: 0,
+
+    //Valores permitidos para el número de ciclos
+    cycleOptions: [
+    0,
+    3,
+    6,
+    9,
+    12,
+    27,
+    54,
+    108
+]
 
 };

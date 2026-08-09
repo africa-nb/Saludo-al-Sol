@@ -147,3 +147,27 @@
         transform .25s ease;
 
 }
+
+#session-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    margin-left:20px;
+
+}
+
+#cycle-counter{
+
+    font-weight:600;
+
+    font-size:.95rem;
+
+    color:var(--color-primary);
+
+    white-space:nowrap;
+
+}

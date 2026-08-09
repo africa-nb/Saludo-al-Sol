@@ -14,6 +14,8 @@
     <meta name="theme-color"
           content="#D97706">
 
+    <link rel="manifest" href="./manifest.json">      
+
     <title>Saludo al Sol</title>
 
     <!-- Google Fonts -->
@@ -28,11 +30,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;900&display=swap"
           rel="stylesheet">
 
-    <!-- Tailwind -->
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- CSS -->
+   
      
     <link rel="stylesheet" href="css/design-system.css">  
     <link rel="stylesheet" href="./css/reset.css">
@@ -63,61 +61,39 @@
 
     <!-- CONTENIDO PRINCIPAL -->
 
-    <main id="app">
+    <!-- CONTENIDO PRINCIPAL -->
 
-        <!-- PANEL SUPERIOR -->
+<main id="app">
 
-        <section id="status-panel"></section>
+    <!-- RELOJ -->
 
-        <!-- CRONÓMETRO -->
+    <section id="clock-container">
 
-        <section id="timer-panel"></section>
+        <!-- CENTRO -->
 
-        <!-- CONTADOR -->
+        <div id="sun-center">
 
-        <section id="cycle-counter"></section>
+            <div id="sun-icon">☀️</div>
 
-        <!-- ESTADÍSTICAS -->
+            <h2>Saludo al Sol</h2>
 
-        <section id="statistics-panel"></section>
+            <p>Surya Namaskar</p>
 
-        <!-- RESPIRACIÓN -->
+            <span>11 posturas</span>
 
-        <section id="breathing-panel"></section>
+        </div>
 
-        <!-- VOZ -->
+        <!-- SVG -->
 
-        <section id="speech-panel"></section>
+        <svg id="clock-svg"></svg>
 
-        <!-- RELOJ -->
+        <!-- POSTURAS -->
 
-        <section id="clock-container">
+        <div id="postures"></div>
 
-            <!-- CENTRO -->
+    </section>
 
-            <div id="sun-center">
-
-                <div id="sun-icon">☀️</div>
-
-                <h2>Saludo al Sol</h2>
-
-                <p>Surya Namaskar</p>
-
-                <span>11 posturas</span>
-
-            </div>
-
-            <!-- SVG -->
-
-            <svg id="clock-svg"></svg>
-
-            <!-- POSTURAS -->
-
-            <div id="postures"></div>
-
-        </section>
-
-    </main>
+</main>
 
     <!-- DIÁLOGOS -->
 
