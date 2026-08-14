@@ -2,9 +2,10 @@
  * =====================================================
  * SALUDO AL SOL
  * Archivo principal de la aplicación
+ *
+ * Autora: África Núñez Bazán
  * =====================================================
  */
-
 "use strict";
 
 import { crearReloj } from "./modules/clock.js";

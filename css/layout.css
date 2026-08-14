@@ -1,130 +1,499 @@
 /* ==========================================================
-   LAYOUT GENERAL
-   Proyecto: Saludo-al-Sol
-   ========================================================== */
+LAYOUT GENERAL
+Proyecto: Saludo-al-Sol
+========================================================== */
 
-:root{
-    --header-height:80px;
-    --toolbar-height:70px;
-    --footer-height:60px;
+:root {
 
-    --max-width:1600px;
+    --header-height: 80px;
+    --toolbar-height: 70px;
+    --footer-height: 60px;
 
-    --background:#fdfbf7;
+    --max-width: 1600px;
 
-    --surface:#ffffff;
+    --background: #fdfbf7;
+    --surface: #ffffff;
+    --border: #eadfca;
 
-    --border:#eadfca;
-
-    --shadow:0 12px 28px rgba(0,0,0,.08);
+    --shadow:
+        0 12px 28px rgba(0, 0, 0, .08);
 }
 
-*{
-    box-sizing:border-box;
+
+/* ==========================================================
+BOX SIZING
+========================================================== */
+
+* {
+    box-sizing: border-box;
 }
 
-html{
-    scroll-behavior:smooth;
+
+/* ==========================================================
+HTML
+========================================================== */
+
+html {
+    scroll-behavior: smooth;
 }
 
-body{
 
-    margin:0;
+/* ==========================================================
+BODY
+========================================================== */
 
-    min-height:100vh;
+body {
 
-    font-family:"Outfit",sans-serif;
+    margin: 0;
 
-    background:var(--background);
+    min-height: 100vh;
 
-    color:#2d2623;
+    font-family: "Outfit", sans-serif;
 
-    display:flex;
+    background: var(--background);
 
-    flex-direction:column;
+    color: #2d2623;
 
+    display: flex;
+
+    flex-direction: column;
 }
 
-#app{
 
-    width:min(100%,var(--max-width));
+/* ==========================================================
+CABECERA
+========================================================== */
 
-    margin:auto;
+header {
 
-    padding:24px;
+    width: 100%;
 
-    display:grid;
-
-    gap:24px;
-
+    min-height: var(--header-height);
 }
 
-header{
 
-    width:100%;
+/* ==========================================================
+BARRA DE HERRAMIENTAS
+========================================================== */
 
-    min-height:var(--header-height);
+nav {
 
+    width: 100%;
+
+    min-height: var(--toolbar-height);
 }
 
-nav{
 
-    width:100%;
+/* ==========================================================
+APLICACIÓN
+========================================================== */
 
-    min-height:var(--toolbar-height);
+#app {
 
+    width: min(100%, var(--max-width));
+
+    margin: 0 auto;
+
+    padding: 24px;
+
+    flex: 1;
 }
 
-footer{
 
-    width:100%;
+/* ==========================================================
+ZONA PRINCIPAL DE PRÁCTICA
+========================================================== */
 
-    min-height:var(--footer-height);
+/*
+ * ESCRITORIO
+ *
+ * ┌──────────────────────┬──────────────────────┐
+ * │                      │                      │
+ * │   TARJETA ACTIVA     │       CÍRCULO        │
+ * │                      │                      │
+ * │                      │                      │
+ * └──────────────────────┴──────────────────────┘
+ *
+ * Ambos elementos tienen exactamente
+ * la misma altura.
+ */
 
+#practice-area {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    justify-items: center;
+
+    gap: 40px;
+
+    /*
+     * Tamaño común de tarjeta y círculo.
+     */
+
+    --practice-size:
+        min(
+            70vh,
+            680px
+        );
+
+    min-height:
+        calc(
+            100vh
+            - var(--header-height)
+            - var(--toolbar-height)
+            - var(--footer-height)
+            - 48px
+        );
 }
+
+
+/* ==========================================================
+POSTURA ACTIVA
+========================================================== */
+
+#active-posture-panel {
+
+    width: 100%;
+
+    height: var(--practice-size);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* ==========================================================
+CONTENEDOR DE LA POSTURA ACTIVA
+========================================================== */
+
+#active-posture {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* ==========================================================
+CÍRCULO DE POSTURAS
+========================================================== */
+
+#clock-panel {
+
+    width: 100%;
+
+    height: var(--practice-size);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* ==========================================================
+CONTENEDOR DEL CÍRCULO
+========================================================== */
+
+/* ==========================================================
+CONTENEDOR DEL CÍRCULO
+========================================================== */
+
+#clock-container {
+
+    position: relative;
+
+    height: var(--practice-size);
+
+    width: var(--practice-size);
+
+    aspect-ratio: 1 / 1;
+
+    margin: 0 auto;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    border: 2px solid var(--border);
+
+    box-shadow: var(--shadow);
+
+    overflow: visible;
+
+    flex-shrink: 0;
+}
+
+
+/* ==========================================================
+PANELES GENERALES
+========================================================== */
 
 #status-panel,
-
 #timer-panel,
-
 #cycle-counter,
-
 #statistics-panel,
-
 #breathing-panel,
+#speech-panel {
 
-#speech-panel{
+    background: var(--surface);
 
-    background:var(--surface);
+    border: 1px solid var(--border);
 
-    border:1px solid var(--border);
+    border-radius: 18px;
 
-    border-radius:18px;
+    box-shadow: var(--shadow);
 
-    box-shadow:var(--shadow);
-
-    padding:20px;
-
+    padding: 20px;
 }
 
-#clock-container{
 
-    position:relative;
+/* ==========================================================
+CENTRO DEL CÍRCULO
+========================================================== */
 
-    width:100%;
+#sun-center {
 
-    aspect-ratio:1;
+    position: absolute;
 
-    max-width:980px;
+    left: 50%;
 
-    margin:auto;
+    top: 50%;
 
-    border-radius:50%;
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
 
-    background:white;
+    z-index: 2;
 
-    border:2px solid var(--border);
+    display: flex;
 
-    box-shadow:var(--shadow);
+    flex-direction: column;
 
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+}
+
+
+/* ==========================================================
+PIE
+========================================================== */
+
+footer {
+
+    width: 100%;
+
+    min-height: var(--footer-height);
+}
+
+
+/* ==========================================================
+ESCRITORIO PEQUEÑO
+========================================================== */
+
+@media (max-width: 1200px) {
+
+    #practice-area {
+
+        gap: 30px;
+
+        --practice-size:
+            min(
+                65vh,
+                580px
+            );
+    }
+}
+
+
+/* ==========================================================
+TABLET / ANDROID
+========================================================== */
+
+@media (max-width: 900px) {
+
+    #app {
+        padding: 20px;
+    }
+
+    #practice-area {
+
+        grid-template-columns: 1fr;
+
+        gap: 36px;
+
+        min-height: auto;
+
+        --practice-size:
+            min(
+                70vh,
+                600px
+            );
+    }
+
+
+    /* ------------------------------------------------------
+       POSTURA ACTIVA
+       ------------------------------------------------------ */
+
+    #active-posture-panel {
+
+        order: 1;
+
+        width: 100%;
+
+        height: auto;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+    }
+
+
+    #active-posture {
+
+        width: 100%;
+
+        height: auto;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+    }
+
+
+    /* ------------------------------------------------------
+       CÍRCULO
+       ------------------------------------------------------ */
+
+    #clock-panel {
+
+        order: 2;
+
+        width: 100%;
+
+        height: auto;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+    }
+
+
+    #clock-container {
+
+        width:
+            min(
+                100%,
+                600px
+            );
+
+        height:
+            min(
+                100%,
+                600px
+            );
+
+        aspect-ratio: 1 / 1;
+
+        flex-shrink: 0;
+    }
+}
+
+
+/* ==========================================================
+MÓVIL
+========================================================== */
+
+@media (max-width: 600px) {
+
+    #app {
+
+        padding: 16px;
+    }
+
+
+    #practice-area {
+
+        gap: 28px;
+
+        --practice-size:
+            min(
+                70vh,
+                500px
+            );
+    }
+
+
+    /* ------------------------------------------------------
+       POSTURA ACTIVA
+       ------------------------------------------------------ */
+
+    #active-posture-panel {
+
+        width: 100%;
+
+        height: auto;
+    }
+
+
+    #active-posture {
+
+        width: 100%;
+
+        height: auto;
+    }
+
+
+    /* ------------------------------------------------------
+       CÍRCULO
+       ------------------------------------------------------ */
+
+    #clock-panel {
+
+        width: 100%;
+
+        height: auto;
+    }
+
+
+    #clock-container {
+
+        width: 100%;
+
+        height: auto;
+
+        aspect-ratio: 1 / 1;
+
+        flex-shrink: 0;
+    }
 }

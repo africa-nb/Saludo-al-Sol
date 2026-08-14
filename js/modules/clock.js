@@ -1,131 +1,143 @@
 /**
  * =====================================================
- * MÓDULO DEL RELOJ
+ * MÓDULO DEL CÍRCULO
  * =====================================================
+ *
+ * Dibuja únicamente el círculo exterior.
+ *
+ * Las imágenes de las posturas se gestionan
+ * desde postures.js.
+ *
+ * La postura activa se identifica mediante
+ * el resaltado de su propia imagen.
  */
 
 "use strict";
 
+
+/* =====================================================
+   CONFIGURACIÓN
+   ===================================================== */
+
 const SIZE = 1000;
+
 const CENTER = 500;
+
 const RADIUS = 420;
-const MARKER_RADIUS = 130;
-const TOTAL = 11;
-const css = getComputedStyle(document.documentElement);
-
-const COLOR_BORDER =
-    css.getPropertyValue("--color-border").trim();
-
-const COLOR_PRIMARY =
-    css.getPropertyValue("--color-primary").trim();
-
-const COLOR_ACTIVE =
-    css.getPropertyValue("--color-active").trim();
 
 
-let marker = null;
+/* =====================================================
+   CREAR CÍRCULO
+   ===================================================== */
 
-
-/**
- * Dibuja el reloj SVG
- */
 export function crearReloj() {
 
-    const svg = document.getElementById("clock-svg");
+    const svg =
+        document.getElementById("clock-svg");
+
 
     if (!svg) {
 
-        console.error("No existe el elemento #clock-svg");
+        console.error(
+            "No existe el elemento #clock-svg"
+        );
+
         return;
 
     }
 
-    // Limpiar por si volvemos a dibujar
+
+    /*
+     * Limpiar el SVG por si volvemos
+     * a dibujar el círculo.
+     */
+
     svg.innerHTML = "";
 
-    // Configuración del SVG
-    svg.setAttribute("viewBox", `0 0 ${SIZE} ${SIZE}`);
 
-    /* ==========================================
-       CÍRCULO PRINCIPAL
-    ========================================== */
+    /*
+     * Configuración del SVG.
+     */
 
-    const circle = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "circle"
+    svg.setAttribute(
+        "viewBox",
+        `0 0 ${SIZE} ${SIZE}`
     );
 
-    circle.setAttribute("cx", CENTER);
-    circle.setAttribute("cy", CENTER);
-    circle.setAttribute("r", RADIUS);
 
-    circle.setAttribute("fill", "none");
-    circle.setAttribute("stroke", COLOR_BORDER);
-    circle.setAttribute("stroke-width", "3");
+    /* =================================================
+       CÍRCULO PRINCIPAL
+       ================================================= */
 
-    svg.appendChild(circle);
-
-    /* ==========================================
-       PUNTOS DE LAS POSTURAS
-    ========================================== */
-
-    for (let i = 0; i < TOTAL; i++) {
-
-        const angle = ((360 / TOTAL) * i - 90) * Math.PI / 180;
-
-        const x = CENTER + Math.cos(angle) * RADIUS;
-        const y = CENTER + Math.sin(angle) * RADIUS;
-
-        const mark = document.createElementNS(
+    const circle =
+        document.createElementNS(
             "http://www.w3.org/2000/svg",
             "circle"
         );
 
-        mark.setAttribute("cx", x);
-        mark.setAttribute("cy", y);
-        mark.setAttribute("r", "8");
-        mark.setAttribute("fill", COLOR_BORDER);
 
-        svg.appendChild(mark);
-
-    }
-
-    /* ==========================================
-       MARCADOR ACTIVO
-    ========================================== */
-
-    marker = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "circle"
+    circle.setAttribute(
+        "cx",
+        CENTER
     );
 
-    marker.setAttribute("id", "active-marker");
 
-    marker.setAttribute("cx", CENTER);
-    marker.setAttribute("cy", CENTER - MARKER_RADIUS);
+    circle.setAttribute(
+        "cy",
+        CENTER
+    );
 
-    marker.setAttribute("r", "8");
 
-    marker.setAttribute("fill", COLOR_ACTIVE);
-    marker.setAttribute("stroke", "none");
+    circle.setAttribute(
+        "r",
+        RADIUS
+    );
 
-    svg.appendChild(marker);
 
-    console.log("✔ Reloj SVG creado");
+    circle.setAttribute(
+        "fill",
+        "none"
+    );
 
-}
 
-export function moverMarcador(indice) {
+    /*
+     * Utilizamos las variables del
+     * sistema de diseño.
+     */
 
-    if (!marker) return;
+    const css =
+        getComputedStyle(
+            document.documentElement
+        );
 
-    const angle =
-        ((360 / TOTAL) * indice - 90) * Math.PI / 180;
 
-    const x = CENTER + Math.cos(angle) * MARKER_RADIUS;
-    const y = CENTER + Math.sin(angle) * MARKER_RADIUS;
+    const COLOR_BORDER =
+        css
+            .getPropertyValue(
+                "--color-border"
+            )
+            .trim();
 
-    marker.setAttribute("cx", x);
-    marker.setAttribute("cy", y);
+
+    circle.setAttribute(
+        "stroke",
+        COLOR_BORDER
+    );
+
+
+    circle.setAttribute(
+        "stroke-width",
+        "3"
+    );
+
+
+    svg.appendChild(
+        circle
+    );
+
+
+    console.log(
+        "✔ Círculo SVG creado"
+    );
 
 }

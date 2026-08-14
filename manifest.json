@@ -2,6 +2,7 @@
     "name": "Saludo al Sol",
     "short_name": "Saludo al Sol",
     "description": "Aplicación interactiva para la práctica del Saludo al Sol (Surya Namaskar).",
+    "author": "África Núñez Bazán",
     "start_url": "./index.html",
     "scope": "./",
     "display": "standalone",

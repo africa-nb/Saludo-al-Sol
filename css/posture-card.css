@@ -1,225 +1,325 @@
-#postures{
+/* =====================================================
+   POSTURAS DEL CÍRCULO
+   ===================================================== */
 
-    position:absolute;
+#postures {
 
-    inset:0;
+    position: absolute;
 
-    pointer-events:none;
+    inset: 0;
 
-}
-
-.posture-card{
-
-    position:absolute;
-
-    width:150px;
-
-    min-height:170px;
-
-    transform:translate(-50%,-50%);
-
-    background:var(--color-surface);
-
-    border-radius:var(--radius-medium);
-
-    padding:12px;
-
-    box-shadow:var(--shadow-medium);
-
-    text-align:center;
-
-    transition:all .35s ease;
-
-}
-
-.posture-card:hover{
-
-    transform:translate(-50%,-50%) scale(1.05);
-
+    pointer-events: none;
 }
 
 
-.posture-number{
+/* -----------------------------------------------------
+   IMAGEN INDIVIDUAL
+   ----------------------------------------------------- */
 
-    width:34px;
+.posture-circle-image {
 
-    height:34px;
+    position: absolute;
 
-    margin:auto;
+    width: 72px;
+    height: 72px;
 
-    border-radius:50%;
+    object-fit: contain;
 
-    background:#D97706;
+    transform:
+        translate(-50%, -50%)
+        scale(1);
 
-    color:white;
+    opacity: 0.65;
 
-    display:flex;
+    transition:
+        left 0.45s ease,
+        top 0.45s ease,
+        transform 0.45s ease,
+        opacity 0.45s ease,
+        filter 0.45s ease;
 
-    align-items:center;
-
-    justify-content:center;
-
-    font-weight:bold;
-
+    z-index: 5;
 }
 
-.posture-image{
 
-    width:72px;
+/* -----------------------------------------------------
+   POSTURA ACTIVA EN EL CÍRCULO
+   ----------------------------------------------------- */
 
-    height:72px;
+.posture-circle-image.active {
 
-    object-fit:contain;
+    transform:
+        translate(-50%, -50%)
+        scale(1.25);
 
-    margin:10px auto;
+    opacity: 1;
 
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(217, 119, 6, 0.65)
+        );
+
+    z-index: 10;
 }
 
-.posture-title{
 
-    font-size:15px;
+/* =====================================================
+   POSTURA ACTIVA CENTRAL
+   ===================================================== */
 
-    font-weight:700;
+#active-posture {
 
-    margin-top:4px;
+    width: 100%;
 
+    height: 100%;
 }
 
-.posture-subtitle{
 
-    font-size:12px;
+/* -----------------------------------------------------
+   TARJETA
+   ----------------------------------------------------- */
 
-    color:#666;
+.active-posture-card {
 
-}
+    
+    width: min(380px, 100%);
 
-.posture-card.active{
+    height: 100%;
 
-    border:4px solid #D97706;
+    min-height: 0;
 
-    transform:translate(-50%,-50%) scale(1.12);
+    display: flex;
 
-    box-shadow:0 0 35px rgba(217,119,6,.35);
+    flex-direction: column;
 
-}
+    align-items: center;
 
-.posture-card.active{
+    justify-content: center;
 
-    transform: translate(-50%, -50%) scale(1.55);
+    box-sizing: border-box;
 
-    border: 5px solid #D97706;
+    padding: 32px 30px;
+
+    background: var(--color-surface);
+
+    border: 4px solid #D97706;
+
+    border-radius: 32px;
 
     box-shadow:
-        0 0 45px rgba(217,119,6,.55),
-        0 20px 45px rgba(0,0,0,.20);
+        0 0 45px
+        rgba(217, 119, 6, 0.35),
 
-    opacity:1;
+        0 20px 45px
+        rgba(0, 0, 0, 0.16);
 
-    z-index:100;
-
-}
-
-.posture-card{
+    text-align: center;
 
     transition:
-        left .45s ease,
-        top .45s ease,
-        transform .45s ease,
-        box-shadow .45s ease,
-        opacity .45s ease;
-
+        background-color 0.35s ease,
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
 }
 
-.posture-card{
 
-    opacity:.60;
+/* -----------------------------------------------------
+   NOMBRE DE LA POSTURA
+   ----------------------------------------------------- */
 
+.active-posture-header {
+
+    font-size: 1.05rem;
+
+    font-weight: 600;
+
+    color: var(--color-text-secondary);
+
+    margin-bottom: 18px;
 }
 
-.posture-card.active{
 
-    opacity:1;
+/* -----------------------------------------------------
+   IMAGEN
+   ----------------------------------------------------- */
 
+.active-posture-image {
+
+    width: 190px;
+
+    height: 190px;
+
+    object-fit: contain;
+
+    margin: 5px auto 18px;
 }
 
-.breathing-label{
 
-    margin-top:8px;
+/* -----------------------------------------------------
+   SUBTÍTULO
+   ----------------------------------------------------- */
 
-    padding:6px 10px;
+.active-posture-subtitle {
 
-    border-radius:999px;
+    margin: 0 0 24px;
 
-    font-size:.82rem;
+    font-size: 1.7rem;
 
-    font-weight:700;
+    font-weight: 500;
 
-    letter-spacing:.05em;
-
-    text-align:center;
-
+    color: var(--color-text);
 }
 
-.breathing-inhale{
 
-    background:#DBEAFE;
+/* =====================================================
+   INDICACIÓN DE RESPIRACIÓN
+   ===================================================== */
 
-    color:#1D4ED8;
+.active-breathing-label {
 
+    width: min(280px, 100%);
+
+    box-sizing: border-box;
+
+    padding: 12px 20px;
+
+    border-radius: 999px;
+
+    font-size: 1.15rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.06em;
+
+    text-align: center;
 }
 
-.breathing-exhale{
 
-    background:#DCFCE7;
+/* -----------------------------------------------------
+   INHALA
+   ----------------------------------------------------- */
 
-    color:#15803D;
+.active-breathing-label.breathing-inhale {
 
+    background: #DBEAFE;
+
+    color: #1D4ED8;
 }
 
-.breathing-hold{
 
-    background:#EDE9FE;
+/* -----------------------------------------------------
+   EXHALA
+   ----------------------------------------------------- */
 
-    color:#6D28D9;
+.active-breathing-label.breathing-exhale {
 
-}
-.posture-header{
+    background: #DCFCE7;
 
-    font-size:.78rem;
-
-    font-weight:600;
-
-    color:var(--color-text-secondary);
-
-    text-align:center;
-
-    margin-bottom:8px;
-
+    color: #15803D;
 }
 
-.posture-card.active.resp-inhale{
 
-    background:#EFF6FF;
+/* -----------------------------------------------------
+   RETÉN
+   ----------------------------------------------------- */
 
+.active-breathing-label.breathing-hold {
+
+    background: #EDE9FE;
+
+    color: #6D28D9;
 }
 
-.posture-card.active.resp-exhale{
 
-    background:#F0FDF4;
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
 
+@media (max-width: 900px) {
+
+    .posture-circle-image {
+
+        width: 60px;
+
+        height: 60px;
+    }
+
+
+    .active-posture-card {
+
+        width: min(320px, 90vw);
+
+        min-height: 400px;
+
+        height: auto;
+
+        padding: 24px;
+    }
+
+
+    .active-posture-image {
+
+        width: 160px;
+
+        height: 160px;
+    }
+
+
+    .active-posture-subtitle {
+
+        font-size: 1.45rem;
+    }
 }
 
-.posture-card.active.resp-hold{
 
-    background:#F5F3FF;
+@media (max-width: 600px) {
 
-}
+    .posture-circle-image {
 
-.posture-card{
+        width: 48px;
 
-    transition:
-        background-color .35s ease,
-        transform .35s ease,
-        box-shadow .35s ease;
+        height: 48px;
+    }
 
+
+    .active-posture-card {
+
+        width: min(300px, 88vw);
+
+        min-height: 360px;
+
+        height: auto;
+
+        padding: 20px;
+    }
+
+
+    .active-posture-image {
+
+        width: 135px;
+
+        height: 135px;
+    }
+
+
+    .active-posture-header {
+
+        font-size: 0.95rem;
+    }
+
+
+    .active-posture-subtitle {
+
+        font-size: 1.3rem;
+
+        margin-bottom: 18px;
+    }
+
+
+    .active-breathing-label {
+
+        font-size: 1rem;
+
+        padding: 10px 16px;
+    }
 }

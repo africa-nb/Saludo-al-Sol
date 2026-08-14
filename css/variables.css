@@ -1,0 +1,137 @@
+/* ==========================================================
+   VARIABLES GLOBALES
+   Proyecto: Saludo-al-Sol
+   ========================================================== */
+
+
+/* ==========================================================
+   FUENTES LOCALES
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   OUTFIT
+   Fuente principal de la aplicación
+   ---------------------------------------------------------- */
+
+@font-face {
+    font-family: "Outfit";
+    src: url("../assets/fonts/Outfit-Light.woff2")
+        format("woff2");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Outfit";
+    src: url("../assets/fonts/Outfit-Regular.woff2")
+        format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Outfit";
+    src: url("../assets/fonts/Outfit-Medium.woff2")
+        format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Outfit";
+    src: url("../assets/fonts/Outfit-SemiBold.woff2")
+        format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Outfit";
+    src: url("../assets/fonts/Outfit-Bold.woff2")
+        format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Outfit";
+    src: url("../assets/fonts/Outfit-ExtraBold.woff2")
+        format("woff2");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Outfit";
+    src: url("../assets/fonts/Outfit-Black.woff2")
+        format("woff2");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* ----------------------------------------------------------
+   PLAYFAIR DISPLAY
+   Fuente decorativa para títulos
+   ---------------------------------------------------------- */
+
+/*
+ * El paquete que has descargado no incluye una variante 600.
+ * Utilizamos Bold también para 600.
+ */
+
+@font-face {
+    font-family: "Playfair Display";
+    src: url("../assets/fonts/PlayfairDisplay-Bold.woff2")
+        format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Playfair Display";
+    src: url("../assets/fonts/PlayfairDisplay-Bold.woff2")
+        format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Playfair Display";
+    src: url("../assets/fonts/PlayfairDisplay-Black.woff2")
+        format("woff2");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* ==========================================================
+   COLORES
+   ========================================================== */
+
+:root {
+
+    --color-background: #fdfbf7;
+
+    --color-surface: #ffffff;
+
+    --color-border: #eadfca;
+
+    --color-primary: #d97706;
+
+    --color-active: #d97706;
+
+    --color-text: #2d2623;
+
+    --color-text-secondary: #6b625d;
+}

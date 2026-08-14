@@ -11,6 +11,8 @@
     <meta name="description"
           content="Aplicación interactiva para la práctica del Saludo al Sol (Surya Namaskar).">
 
+    <meta name="author" content="África Núñez Bazán">      
+
     <meta name="theme-color"
           content="#D97706">
 
@@ -18,19 +20,7 @@
 
     <title>Saludo al Sol</title>
 
-    <!-- Google Fonts -->
-
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;900&display=swap"
-          rel="stylesheet">
-
-   
+    
      
     <link rel="stylesheet" href="css/design-system.css">  
     <link rel="stylesheet" href="./css/reset.css">
@@ -59,41 +49,78 @@
 
     <nav id="toolbar"></nav>
 
+
+    
     <!-- CONTENIDO PRINCIPAL -->
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <main id="app">
 
-<main id="app">
+        <!-- ZONA PRINCIPAL DE PRÁCTICA -->
 
-    <!-- RELOJ -->
+        <section id="practice-area">
 
-    <section id="clock-container">
+            <!-- POSTURA ACTIVA -->
 
-        <!-- CENTRO -->
+             <section id="active-posture-panel">
 
-        <div id="sun-center">
+                <div id="active-posture"></div>
 
-            <div id="sun-icon">☀️</div>
+            </section>
 
-            <h2>Saludo al Sol</h2>
 
-            <p>Surya Namaskar</p>
+            <!-- CÍRCULO DE POSTURAS -->
 
-            <span>11 posturas</span>
+            <section id="clock-panel">
 
-        </div>
+                <div id="clock-container">
 
-        <!-- SVG -->
+                    <!-- CENTRO DEL CÍRCULO -->
 
-        <svg id="clock-svg"></svg>
+                    <div id="sun-center">
+                        
+                        <img
+                            src="./assets/icons/sol.png"
+                            alt="Sol"
+                            class="sun-center-image"
+                            width="75"
+                        >
 
-        <!-- POSTURAS -->
+                        <div class="sun-center-title">
+                           <h2>Saludo al Sol</h2>
+                        </div>
 
-        <div id="postures"></div>
+                        <div class="sun-center-subtitle">
+                            <p>Surya Namaskar</p>
+                        </div>
 
-    </section>
+                        <div class="sun-center-count">
+                            <span>11 posturas</span>
+                        </div>
 
-</main>
+                    </div>
+
+
+                    <!-- SVG DEL CÍRCULO -->
+
+                    <svg
+                        id="clock-svg"
+                        viewBox="0 0 1000 1000"
+                        aria-label="Ciclo de 11 posturas del Saludo al Sol">
+                    </svg>
+
+
+                    <!-- IMÁGENES DE LAS POSTURAS -->
+
+                    <div id="postures"></div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
 
     <!-- DIÁLOGOS -->
 

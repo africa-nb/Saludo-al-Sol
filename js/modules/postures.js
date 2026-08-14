@@ -7,36 +7,34 @@
 "use strict";
 
 import { POSTURES } from "../../data/postures.js";
-import { moverMarcador } from "./clock.js";
 import { incrementarCiclos } from "./cycleCounter.js";
 import { EVENTS } from "./events.js";
+
 
 
 /* ==========================================
    CONFIGURACIÓN
 ========================================== */
 
-const NORMAL_RADIUS = 37.5;
-const ACTIVE_RADIUS = 31.5;
+const IMAGE_RADIUS = 30;
 
-const NORMAL_SCALE = 1;
-const ACTIVE_SCALE = 1.6;
 
 /* ==========================================
    ESTADO DEL MÓDULO
 ========================================== */
 
 let posturaActiva = 0;
-let tarjetas = [];
+
+let imagenesPosturas = [];
 
 
 /* ==========================================
    UTILIDADES
 ========================================== */
 
-function obtenerIndicacionRespiracion(tipo){
+function obtenerIndicacionRespiracion(tipo) {
 
-    switch(tipo){
+    switch (tipo) {
 
         case "inhale":
             return "INHALA";
@@ -58,32 +56,23 @@ export function notificarCambioPostura() {
 
     const postura = POSTURES[posturaActiva];
 
-    if (!postura) return;
-
-    console.log(
-        "📢 Emitiendo POSTURE_CHANGED:",
-        postura.name,
-        postura.breathing
-    );
+    if (!postura) {
+        return;
+    }
 
     document.dispatchEvent(
 
         new CustomEvent(
-
             EVENTS.POSTURE_CHANGED,
 
             {
-
                 detail: {
-
-                    indice: posturaActiva,
 
                     postura: postura.name,
 
                     respiracion: postura.breathing
 
                 }
-
             }
 
         )
@@ -91,80 +80,196 @@ export function notificarCambioPostura() {
     );
 
 }
+
+
 /* ==========================================
-   CREACIÓN DE LAS POSTURAS
+   CREAR TARJETA DE POSTURA ACTIVA
 ========================================== */
 
+function actualizarPosturaActiva(indice) {
 
-
-export function crearPosturas() {
-
-    const container = document.getElementById("postures");
+    const container =
+        document.getElementById("active-posture");
 
     if (!container) {
 
-        console.error("No existe #postures");
+        console.error(
+            "No existe #active-posture"
+        );
 
         return;
 
     }
 
-    container.innerHTML = "";
 
-    const TOTAL = POSTURES.length;
-    const RADIUS = 38; // porcentaje del contenedor
+    const posture =
+        POSTURES[indice];
 
 
-    POSTURES.forEach((posture, index) => {
+    container.innerHTML = `
 
-        const angle = ((360 / TOTAL) * index - 90) * Math.PI / 180;
+        <article class="active-posture-card">
 
-        const x = 50 + RADIUS * Math.cos(angle);
-        const y = 50 + RADIUS * Math.sin(angle);
+            <div class="active-posture-header">
 
-        const card = document.createElement("article");
+                ${posture.name}
 
-        card.className = "posture-card";
+            </div>
 
-        card.dataset.angle = angle;
-        card.dataset.index = index;
-
-        posicionarTarjeta(card, angle, NORMAL_RADIUS);
-
-        card.innerHTML = `
-            <div class="posture-header">${posture.name}</div>
 
             <img
-                class="posture-image"
+                class="active-posture-image"
                 src="${posture.image}"
                 alt="${posture.name}">
 
-            <p class="posture-subtitle">${posture.subtitle}</p>
 
-            <div class="breathing-label breathing-${posture.breathing}">
-                ${obtenerIndicacionRespiracion(posture.breathing)}
+            <p class="active-posture-subtitle">
+
+                ${posture.subtitle}
+
+            </p>
+
+
+            <div
+                class="
+                    active-breathing-label
+                    breathing-${posture.breathing}
+                ">
+
+                ${obtenerIndicacionRespiracion(
+                    posture.breathing
+                )}
+
             </div>
-        `;
 
-        container.appendChild(card);
-        tarjetas.push(card);
+        </article>
 
-    });
+    `;
+
+}
+
+
+/* ==========================================
+   CREAR IMÁGENES DEL CÍRCULO
+========================================== */
+
+export function crearPosturas() {
+
+    const container =
+        document.getElementById("postures");
+
+
+    if (!container) {
+
+        console.error(
+            "No existe #postures"
+        );
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+    imagenesPosturas = [];
+
+
+    const total =
+        POSTURES.length;
+
+
+    POSTURES.forEach(
+        (posture, index) => {
+
+            const angle =
+                (
+                    (360 / total) * index - 90
+                ) * Math.PI / 180;
+
+
+            const image =
+                document.createElement("img");
+
+
+            image.className =
+                "posture-circle-image";
+
+
+            image.dataset.index =
+                index;
+
+
+            image.dataset.angle =
+                angle;
+
+
+            image.src =
+                posture.image;
+
+
+            image.alt =
+                posture.name;
+
+
+            posicionarImagen(
+                image,
+                angle
+            );
+
+
+            container.appendChild(image);
+
+            imagenesPosturas.push(image);
+
+        }
+    );
+
 
     activarPostura(0);
-    console.log("✔ Posturas creadas");
+
+
+    console.log(
+        "✔ Posturas creadas"
+    );
 
 }
 
-function posicionarTarjeta(card, angle, radius) {
 
-    const x = 50 + Math.cos(angle) * radius;
-    const y = 50 + Math.sin(angle) * radius;
+/* ==========================================
+   POSICIONAR IMAGEN
+========================================== */
 
-    card.style.left = `${x}%`;
-    card.style.top = `${y}%`;
+function posicionarImagen(
+    image,
+    angle
+) {
+
+    const x =
+        50 +
+        Math.cos(angle) *
+        IMAGE_RADIUS;
+
+
+    const y =
+        50 +
+        Math.sin(angle) *
+        IMAGE_RADIUS;
+
+
+    image.style.left =
+        `${x}%`;
+
+
+    image.style.top =
+        `${y}%`;
 
 }
+
+
+/* ==========================================
+   REINICIAR POSTURAS
+========================================== */
 
 export function reiniciarPosturas() {
 
@@ -175,66 +280,133 @@ export function reiniciarPosturas() {
 }
 
 
-export function activarPostura(indice){
-   //Borrar la postura activa anterior
-    tarjetas.forEach(card => {
+/* ==========================================
+   ACTIVAR POSTURA
+========================================== */
 
-        card.classList.remove("active");
-        card.classList.remove(
-            "resp-inhale",
-            "resp-exhale",
-            "resp-hold"
+export function activarPostura(indice) {
+
+    if (
+        indice < 0 ||
+        indice >= POSTURES.length
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Quitar estado activo
+     * de todas las imágenes.
+     */
+
+    imagenesPosturas.forEach(
+        image => {
+
+            image.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    /*
+     * Activar la nueva imagen.
+     */
+
+    const actual =
+        imagenesPosturas[indice];
+
+
+    if (actual) {
+
+        actual.classList.add(
+            "active"
         );
 
-        posicionarTarjeta(
-            card,
-            Number(card.dataset.angle),
-            NORMAL_RADIUS
-        );
+    }
 
-    });
 
-    //Crear la nueva postura activa
-    const actual = tarjetas[indice];
+    /*
+     * Actualizar la tarjeta
+     * independiente.
+     */
 
-    posicionarTarjeta(actual,Number(actual.dataset.angle),ACTIVE_RADIUS);
-    
-    actual.classList.add("active");
-    actual.classList.add(`resp-${POSTURES[indice].breathing}`);
+    actualizarPosturaActiva(
+        indice
+    );
 
-    posturaActiva = indice;
 
-    moverMarcador(indice);
+    /*
+     * Guardar postura actual.
+     */
+
+    posturaActiva =
+        indice;
+
 
     notificarCambioPostura();
 
+
 }
+
+
+/* ==========================================
+   SIGUIENTE POSTURA
+========================================== */
 
 export function siguientePostura() {
 
-    let siguiente = posturaActiva + 1;
+    let siguiente =
+        posturaActiva + 1;
 
-    if (siguiente >= tarjetas.length) {
+
+    /*
+     * Si hemos llegado al final
+     * completamos un ciclo.
+     */
+
+    if (
+        siguiente >=
+        imagenesPosturas.length
+    ) {
 
         incrementarCiclos();
+
         siguiente = 0;
 
     }
 
-    activarPostura(siguiente);
+
+    activarPostura(
+        siguiente
+    );
 
 }
 
+
+/* ==========================================
+   POSTURA ANTERIOR
+========================================== */
+
 export function anteriorPostura() {
 
-    let anterior = posturaActiva - 1;
+    let anterior =
+        posturaActiva - 1;
+
 
     if (anterior < 0) {
 
-        anterior = tarjetas.length - 1;
+        anterior =
+            imagenesPosturas.length - 1;
 
     }
 
-    activarPostura(anterior);
+
+    activarPostura(
+        anterior
+    );
 
 }
