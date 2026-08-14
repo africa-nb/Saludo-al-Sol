@@ -488,9 +488,13 @@ MÓVIL
 
     #clock-container {
 
-        width: 100%;
+        width: 88vw;
 
-        height: auto;
+        height: 88vw;
+
+        max-width: 420px;
+
+        max-height: 420px;
 
         aspect-ratio: 1 / 1;
 
