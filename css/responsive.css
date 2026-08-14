@@ -1,8 +1,31 @@
 /* ==========================================================
-   ADAPTACIÓN ANDROID / MÓVIL
+   ADAPTACIÓN MÓVIL / ANDROID
    ========================================================== */
 
 @media (max-width: 600px) {
+
+    /* ------------------------------------------------------
+       ELIMINAR ESPACIO RESERVADO PARA LA CABECERA VACÍA
+       ------------------------------------------------------ */
+
+    header {
+        min-height: 0;
+        height: 0;
+        padding: 0;
+        margin: 0;
+    }
+
+
+    /* ------------------------------------------------------
+       APLICACIÓN
+       ------------------------------------------------------ */
+
+    #app {
+        width: 100%;
+        padding: 8px 12px 16px;
+        margin: 0 auto;
+    }
+
 
     /* ------------------------------------------------------
        BARRA DE HERRAMIENTAS
@@ -10,15 +33,15 @@
 
     #toolbar {
 
-        width: calc(100% - 24px);
+        width: calc(100% - 8px);
 
         max-width: none;
 
-        padding: 10px 12px;
+        margin: 8px auto;
 
-        margin: 10px auto;
+        padding: 8px 10px;
 
-        gap: 8px;
+        gap: 6px;
 
         box-sizing: border-box;
 
@@ -28,7 +51,7 @@
 
     .toolbar-group {
 
-        gap: 8px;
+        gap: 6px;
 
         flex-shrink: 0;
     }
@@ -36,9 +59,9 @@
 
     .toolbar-button {
 
-        width: 52px;
+        width: 48px;
 
-        height: 52px;
+        height: 48px;
 
         flex-shrink: 0;
     }
@@ -46,39 +69,55 @@
 
     .toolbar-icon {
 
-        width: 24px;
+        width: 22px;
 
-        height: 24px;
+        height: 22px;
     }
 
 
     #session-info {
 
-        gap: 8px;
+        gap: 6px;
 
         margin-left: 0;
 
-        flex-shrink: 0;
+        flex-shrink: 1;
     }
 
 
     #cycle-counter {
 
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 
 
     /* ------------------------------------------------------
-       POSTURA ACTIVA
+       ZONA DE PRÁCTICA
+       ------------------------------------------------------ */
+
+    #practice-area {
+
+        width: 100%;
+
+        gap: 20px;
+
+        min-height: auto;
+
+        --practice-size: auto;
+    }
+
+
+    /* ------------------------------------------------------
+       TARJETA DE POSTURA
        ------------------------------------------------------ */
 
     #active-posture-panel {
 
         width: 100%;
 
-        max-width: 100%;
-
         height: auto;
+
+        max-width: 100%;
 
         overflow: visible;
     }
@@ -88,9 +127,9 @@
 
         width: 100%;
 
-        max-width: 100%;
-
         height: auto;
+
+        max-width: 100%;
 
         overflow: visible;
     }
@@ -98,15 +137,15 @@
 
     .active-posture-card {
 
-        width: min(300px, calc(100vw - 32px));
+        width: min(280px, calc(100vw - 32px));
 
         max-width: calc(100vw - 32px);
 
-        min-height: 360px;
+        min-height: 0;
 
         height: auto;
 
-        padding: 20px;
+        padding: 16px 18px;
 
         margin: 0 auto;
     }
@@ -114,9 +153,35 @@
 
     .active-posture-image {
 
-        width: 135px;
+        width: 110px;
 
-        height: 135px;
+        height: 110px;
+
+        margin: 2px auto 10px;
+    }
+
+
+    .active-posture-header {
+
+        font-size: 0.9rem;
+
+        margin-bottom: 8px;
+    }
+
+
+    .active-posture-subtitle {
+
+        font-size: 1.25rem;
+
+        margin-bottom: 14px;
+    }
+
+
+    .active-breathing-label {
+
+        font-size: 0.95rem;
+
+        padding: 9px 14px;
     }
 
 
@@ -128,9 +193,9 @@
 
         width: 100%;
 
-        max-width: 100%;
-
         height: auto;
+
+        max-width: 100%;
 
         overflow: visible;
     }
@@ -138,7 +203,7 @@
 
     #clock-container {
 
-        width: min(100%, 420px);
+        width: min(100%, 330px);
 
         height: auto;
 
