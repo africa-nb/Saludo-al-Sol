@@ -5,7 +5,7 @@ Proyecto: Saludo-al-Sol
 
 :root {
 
-    --header-height: 80px;
+    --header-height: 0px;
     --toolbar-height: 70px;
     --footer-height: 60px;
 
@@ -65,10 +65,7 @@ CABECERA
 ========================================================== */
 
 header {
-
-    width: 100%;
-
-    min-height: var(--header-height);
+    display: none;
 }
 
 
