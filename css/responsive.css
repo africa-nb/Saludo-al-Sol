@@ -171,12 +171,14 @@
     }
 
     #clock-container {
-        width: min(82vw, 300px);
 
-        height: min(82vw, 300px);
+        width: min(78vw, 280px);
 
-        max-width: 300px;
-        max-height: 300px;
+        height: min(78vw, 280px);
+
+        max-width: 280px;
+
+        max-height: 280px;
 
         aspect-ratio: 1 / 1;
 
