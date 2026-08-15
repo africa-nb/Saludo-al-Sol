@@ -217,15 +217,9 @@
 
     #clock-container {
 
-        width: min(
-            82vw,
-            330px
-        );
+        width: min(82vw, 330px);
 
-        height: min(
-            82vw,
-            330px
-        );
+        height: min(82vw, 330px);
 
         max-width: 330px;
 
