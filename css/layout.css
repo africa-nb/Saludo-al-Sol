@@ -5,7 +5,7 @@ Proyecto: Saludo-al-Sol
 
 :root {
 
-    --header-height: 0px;
+    --header-height: 80px;
     --toolbar-height: 70px;
     --footer-height: 60px;
 
@@ -488,9 +488,9 @@ MÓVIL
 
     #clock-container {
 
-        width: 88vw;
+        width: 85vw;
 
-        height: 88vw;
+        height: 85vw;
 
         max-width: 420px;
 
