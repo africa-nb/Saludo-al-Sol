@@ -23,7 +23,7 @@ const SIZE = 1000;
 
 const CENTER = 500;
 
-const RADIUS = 300;
+const RADIUS = 420;
 
 
 /* =====================================================
