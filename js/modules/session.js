@@ -180,7 +180,7 @@ async function iniciarPreparacion(id) {
     const locucion =
         hablar(
             // "Para comenzar ponte en la postura de la montaña e inhala."
-            "Colocate de pie en postura de la montaña, con los pies firmes sobre la esterilla, la espalda estirada y los brazos relajados a los lados del cuerpo. Prepárate para comenzar el Saludo al Sol. Sigue las posturas de la imagen y escucha mi voz. Te indicaré cuándo inhalar, exhalar o retener. Inhala y comenzamos.",
+            "Colócate de pie en postura de la montaña, con los pies firmes sobre la esterilla, la espalda estirada y los brazos relajados a los lados del cuerpo. Prepárate para comenzar el Saludo al Sol. Sigue las posturas de la imagen y escucha mi voz. Te indicaré cuándo inhalar, exhalar o retener. Inhala y comenzamos.",
             true
         );
 
