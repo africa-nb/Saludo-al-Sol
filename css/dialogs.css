@@ -84,33 +84,60 @@
 
 
 /* ==========================================================
+   FONDO OSCURECIDO DEL MENSAJE DE SESIÓN
+   ========================================================== */
+
+/*
+ * Cuando #session-message está visible,
+ * el body genera una capa independiente
+ * que cubre toda la pantalla.
+ *
+ * IMPORTANTE:
+ *
+ * No utilizamos ::before ni ::after dentro
+ * de #session-message.
+ *
+ * De esta forma el fondo oscuro jamás puede
+ * quedar por encima del texto o del panel.
+ */
+
+body:has(#session-message.visible)::after {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100vw;
+
+    height: 100vh;
+
+    background:
+        rgba(0, 0, 0, .45);
+
+    z-index: 4999;
+
+    pointer-events: none;
+
+}
+
+
+/* ==========================================================
    MENSAJE DE SESIÓN
    ========================================================== */
 
 /*
- * IMPORTANTE:
- *
- * #session-message es directamente la ventana blanca.
- *
- * No utilizamos ::before ni ::after.
- *
- * El sombreado de toda la pantalla se consigue mediante
- * un box-shadow exterior.
- *
- * Esto evita problemas de z-index y garantiza que el texto
- * permanezca siempre dentro y por encima de la ventana.
+ * #session-message es exclusivamente
+ * la ventana blanca.
  */
-
-
-/* ==========================================================
-   VENTANA DEL MENSAJE
-   ========================================================== */
 
 #session-message {
 
     position: fixed;
 
     top: 50%;
+
     left: 50%;
 
     transform:
@@ -129,43 +156,37 @@
 
     box-sizing: border-box;
 
+    /*
+     * Permitimos desplazamiento únicamente
+     * si el contenido fuese demasiado grande.
+     */
+
     overflow-y: auto;
+
+    /*
+     * Evitamos desplazamiento horizontal.
+     */
+
+    overflow-x: hidden;
 
     padding: 32px;
 
     /*
-     * Ventana blanca
+     * PANEL BLANCO
      */
 
     background: #ffffff;
-
-    /*
-     * Borde igual al diálogo de configuración
-     */
 
     border:
         1px solid var(--border);
 
     border-radius: 18px;
 
-    /*
-     * Sombra propia de la ventana
-     */
-
     box-shadow:
-        0 15px 40px rgba(0, 0, 0, .25),
-
-        /*
-         * Esta segunda sombra cubre toda la pantalla
-         * y funciona como fondo oscurecido.
-         *
-         * No afecta al contenido del panel.
-         */
-
-        0 0 0 100vmax rgba(0, 0, 0, .45);
+        0 15px 40px rgba(0, 0, 0, .25);
 
     /*
-     * Texto
+     * TEXTO
      */
 
     color: #2d2623;
@@ -183,23 +204,23 @@
     text-align: center;
 
     /*
-     * Evita que palabras o textos largos
-     * salgan fuera de la ventana.
+     * El texto nunca puede salir
+     * horizontalmente del panel.
      */
 
     overflow-wrap: break-word;
 
-    word-wrap: break-word;
+    word-break: normal;
 
     /*
-     * La ventana está por encima de toda
-     * la aplicación.
+     * MUY IMPORTANTE:
+     * el panel está por encima del overlay.
      */
 
     z-index: 5001;
 
     /*
-     * Estado inicial oculto.
+     * Estado inicial.
      */
 
     opacity: 0;
@@ -249,10 +270,19 @@
 
     #session-message {
 
+        /*
+         * El panel deja siempre un margen
+         * de 16 px a cada lado.
+         */
+
         width:
             calc(
                 100vw - 32px
             );
+
+        /*
+         * También dejamos margen vertical.
+         */
 
         max-height:
             calc(
@@ -268,14 +298,14 @@
 
         line-height: 1.5;
 
-        /*
-         * Mantiene el sombreado completo
-         * también en móvil.
-         */
+    }
 
-        box-shadow:
-            0 12px 30px rgba(0, 0, 0, .25),
-            0 0 0 100vmax rgba(0, 0, 0, .45);
+
+    body:has(#session-message.visible)::after {
+
+        width: 100vw;
+
+        height: 100vh;
 
     }
 
@@ -308,10 +338,6 @@
         font-size: .95rem;
 
         line-height: 1.45;
-
-        box-shadow:
-            0 10px 25px rgba(0, 0, 0, .25),
-            0 0 0 100vmax rgba(0, 0, 0, .45);
 
     }
 
