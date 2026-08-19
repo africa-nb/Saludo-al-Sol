@@ -33,6 +33,11 @@ import {
 
 import { hablar } from "./speech.js";
 
+import {
+    solicitarWakeLock,
+    liberarWakeLock
+} from "./wakeLock.js";
+
 
 /* ==========================================
    ESTADOS
@@ -117,6 +122,19 @@ export function iniciarSesion() {
 
     console.log("▶ Sesión iniciada");
 
+
+    /*
+     * Mantenemos la pantalla encendida
+     * durante toda la práctica.
+     *
+     * No esperamos la Promise porque el
+     * Wake Lock no debe bloquear el inicio
+     * de la sesión.
+     */
+
+    solicitarWakeLock();
+
+
     /*
      * Empezamos una sesión nueva.
      */
@@ -129,14 +147,18 @@ export function iniciarSesion() {
      * Entramos en la fase de preparación.
      */
 
-    estado = SESSION_STATE.PREPARING;
+    estado =
+        SESSION_STATE.PREPARING;
 
     notificarCambioEstado();
 
     const preparacionActual =
         ++idPreparacion;
 
-    iniciarPreparacion(preparacionActual);
+    iniciarPreparacion(
+        preparacionActual
+    );
+
 }
 
 /* ==========================================
@@ -278,14 +300,25 @@ export function pausarSesion() {
         return;
     }
 
-    estado = SESSION_STATE.PAUSED;
+    estado =
+        SESSION_STATE.PAUSED;
+
+
+    /*
+     * Al pausar la práctica dejamos que
+     * el teléfono vuelva a gestionar
+     * automáticamente el apagado de pantalla.
+     */
+
+    liberarWakeLock();
 
     notificarCambioEstado();
 
     pausarCronometro();
 
     const transcurrido =
-        Date.now() - instanteInicioRespiracion;
+        Date.now() -
+        instanteInicioRespiracion;
 
     tiempoRestante =
         SETTINGS.breathingTime * 1000 -
@@ -299,7 +332,9 @@ export function pausarSesion() {
 
     clearTimeout(temporizador);
 
-    console.log("⏸ Sesión pausada");
+    console.log(
+        "⏸ Sesión pausada"
+    );
 
 }
 
@@ -314,9 +349,22 @@ export function reanudarSesion() {
         return;
     }
 
-    console.log("▶ Reanudar");
+    console.log(
+        "▶ Reanudar"
+    );
 
-    estado = SESSION_STATE.RUNNING;
+
+    estado =
+        SESSION_STATE.RUNNING;
+
+
+    /*
+     * Volvemos a mantener la pantalla
+     * encendida.
+     */
+
+    solicitarWakeLock();
+
 
     notificarCambioEstado();
 
@@ -327,7 +375,6 @@ export function reanudarSesion() {
     );
 
 }
-
 
 /* ==========================================
    FINALIZAR SESIÓN
@@ -348,6 +395,14 @@ export function finalizarSesion() {
 
     const postura =
         obtenerPosturaActiva();
+
+
+    /*
+     * Ya no necesitamos mantener
+     * la pantalla encendida.
+     */
+
+    liberarWakeLock();
 
 
     /*
@@ -440,7 +495,13 @@ export function finalizarSesion() {
 function completarSesion() {
 
     clearTimeout(temporizador);
+    
+    /*
+     * La práctica ha terminado.
+     * Liberamos la pantalla.
+     */
 
+    liberarWakeLock();
 
     /*
      * Guardamos los datos de la sesión
