@@ -16,32 +16,9 @@
    ESTADO
 ========================================== */
 
-/*
- * Referencia al bloqueo actual.
- *
- * WakeLockSentinel queda invalidado cuando
- * el sistema lo libera, por lo que debemos
- * solicitar uno nuevo cuando sea necesario.
- */
-
 let wakeLock = null;
 
-
-/*
- * Indica si actualmente necesitamos
- * mantener la pantalla encendida.
- *
- * Es independiente de wakeLock porque el
- * sistema puede liberar el bloqueo
- * automáticamente.
- */
-
 let mantenerPantallaActiva = false;
-
-
-/*
- * Evita solicitudes simultáneas de Wake Lock.
- */
 
 let solicitudPendiente = null;
 
@@ -65,26 +42,17 @@ export function wakeLockDisponible() {
 
 export async function solicitarWakeLock() {
 
-    /*
-     * Indicamos que la sesión necesita
-     * mantener la pantalla activa.
-     */
-
     mantenerPantallaActiva = true;
 
 
-    /*
-     * Si el navegador no dispone de la API,
-     * simplemente continuamos.
-     *
-     * La sesión NO debe detenerse porque
-     * esta función no esté disponible.
-     */
+    /* ======================================
+       COMPROBACIONES
+    ====================================== */
 
     if (!wakeLockDisponible()) {
 
         console.warn(
-            "⚠ Screen Wake Lock no disponible"
+            "❌ Wake Lock no disponible en este navegador"
         );
 
         return false;
@@ -93,8 +61,45 @@ export async function solicitarWakeLock() {
 
 
     /*
-     * Si ya tenemos un bloqueo activo,
-     * no necesitamos solicitar otro.
+     * Información de diagnóstico.
+     */
+
+    console.log(
+        "🔆 Solicitud Wake Lock",
+        {
+            visible:
+                document.visibilityState,
+
+            secure:
+                window.isSecureContext,
+
+            wakeLock:
+                "wakeLock" in navigator
+        }
+    );
+
+
+    /*
+     * La página debe estar visible.
+     */
+
+    if (
+        document.visibilityState !==
+        "visible"
+    ) {
+
+        console.warn(
+            "⚠ Wake Lock no solicitado porque la página no está visible"
+        );
+
+        return false;
+
+    }
+
+
+    /*
+     * Si ya existe un Wake Lock válido,
+     * no solicitamos otro.
      */
 
     if (
@@ -102,14 +107,17 @@ export async function solicitarWakeLock() {
         !wakeLock.released
     ) {
 
+        console.log(
+            "🔆 Wake Lock ya estaba activo"
+        );
+
         return true;
 
     }
 
 
     /*
-     * Si ya hay una solicitud en curso,
-     * esperamos esa misma solicitud.
+     * Evitamos solicitudes duplicadas.
      */
 
     if (solicitudPendiente) {
@@ -119,29 +127,19 @@ export async function solicitarWakeLock() {
     }
 
 
-    /*
-     * Solo podemos solicitar Wake Lock
-     * cuando el documento está visible.
-     */
-
-    if (
-        document.visibilityState !==
-        "visible"
-    ) {
-
-        return false;
-
-    }
-
-
-    /* ==================================
-       SOLICITUD
-    ================================== */
+    /* ======================================
+       SOLICITAR BLOQUEO
+    ====================================== */
 
     solicitudPendiente =
         (async () => {
 
             try {
+
+                console.log(
+                    "🔆 Solicitando navigator.wakeLock.request('screen')..."
+                );
+
 
                 const nuevoWakeLock =
                     await navigator.wakeLock.request(
@@ -149,32 +147,38 @@ export async function solicitarWakeLock() {
                     );
 
 
-                /*
-                 * Guardamos la referencia.
-                 */
-
                 wakeLock =
                     nuevoWakeLock;
 
 
                 console.log(
-                    "🔆 Pantalla activa"
+                    "✅ WAKE LOCK ACTIVADO"
+                );
+
+
+                console.log(
+                    "🔆 Tipo:",
+                    wakeLock.type
                 );
 
 
                 /*
                  * El sistema puede liberar
-                 * el Wake Lock automáticamente.
+                 * automáticamente el Wake Lock.
                  */
 
                 wakeLock.addEventListener(
                     "release",
                     () => {
 
+                        console.warn(
+                            "⚠ WAKE LOCK LIBERADO POR EL SISTEMA"
+                        );
+
+
                         /*
-                         * Solo limpiamos la referencia
-                         * si sigue siendo el bloqueo
-                         * que tenemos almacenado.
+                         * Solo eliminamos la referencia
+                         * si corresponde al bloqueo actual.
                          */
 
                         if (
@@ -186,19 +190,6 @@ export async function solicitarWakeLock() {
 
                         }
 
-
-                        console.log(
-                            "🔆 Wake Lock liberado por el sistema"
-                        );
-
-
-                        /*
-                         * Si seguimos necesitando
-                         * mantener la pantalla activa,
-                         * volveremos a solicitarlo cuando
-                         * la página vuelva a ser visible.
-                         */
-
                     }
                 );
 
@@ -207,13 +198,52 @@ export async function solicitarWakeLock() {
 
             } catch (error) {
 
-                console.warn(
-                    "⚠ No se pudo activar Wake Lock:",
+                wakeLock = null;
+
+
+                console.error(
+                    "❌ ERROR AL SOLICITAR WAKE LOCK"
+                );
+
+
+                console.error(
+                    "Nombre:",
+                    error?.name
+                );
+
+
+                console.error(
+                    "Mensaje:",
+                    error?.message
+                );
+
+
+                console.error(
+                    "Error completo:",
                     error
                 );
 
 
-                wakeLock = null;
+                /*
+                 * Algunos navegadores pueden
+                 * proporcionar información adicional.
+                 */
+
+                if (
+                    error?.name ===
+                    "NotAllowedError"
+                ) {
+
+                    console.warn(
+                        "⚠ Android/navegador ha rechazado el Wake Lock."
+                    );
+
+                    console.warn(
+                        "Puede deberse a visibilidad, batería, ahorro de energía, permisos o política del navegador."
+                    );
+
+                }
+
 
                 return false;
 
@@ -238,30 +268,20 @@ export async function solicitarWakeLock() {
 
 export async function liberarWakeLock() {
 
-    /*
-     * A partir de este momento ya NO queremos
-     * mantener la pantalla activa.
-     */
+    mantenerPantallaActiva =
+        false;
 
-    mantenerPantallaActiva = false;
-
-
-    /*
-     * Si no hay bloqueo activo,
-     * no hay nada que liberar.
-     */
 
     if (!wakeLock) {
+
+        console.log(
+            "🌙 No había Wake Lock que liberar"
+        );
 
         return;
 
     }
 
-
-    /*
-     * Guardamos la referencia antes de
-     * ponerla a null.
-     */
 
     const bloqueo =
         wakeLock;
@@ -274,8 +294,9 @@ export async function liberarWakeLock() {
 
         await bloqueo.release();
 
+
         console.log(
-            "🌙 Pantalla vuelve a su comportamiento normal"
+            "🌙 Wake Lock liberado correctamente"
         );
 
     } catch (error) {
@@ -291,25 +312,22 @@ export async function liberarWakeLock() {
 
 
 /* ==========================================
-   VISIBILIDAD DEL DOCUMENTO
+   RECUPERACIÓN AL VOLVER A LA APLICACIÓN
 ========================================== */
-
-/*
- * Android puede liberar el Wake Lock cuando
- * la página deja de estar visible.
- *
- * Cuando volvemos a la aplicación,
- * intentamos recuperarlo si la sesión
- * todavía está activa.
- */
 
 document.addEventListener(
     "visibilitychange",
     async () => {
 
+        console.log(
+            "👁 Visibilidad:",
+            document.visibilityState
+        );
+
+
         /*
-         * Solo nos interesa cuando la página
-         * vuelve a estar visible.
+         * Solo recuperamos el bloqueo cuando
+         * volvemos a la aplicación.
          */
 
         if (
@@ -322,12 +340,6 @@ document.addEventListener(
         }
 
 
-        /*
-         * Si la sesión ya no necesita
-         * mantener la pantalla activa,
-         * no hacemos nada.
-         */
-
         if (
             !mantenerPantallaActiva
         ) {
@@ -337,9 +349,10 @@ document.addEventListener(
         }
 
 
-        /*
-         * Volvemos a solicitar el Wake Lock.
-         */
+        console.log(
+            "🔆 Intentando recuperar Wake Lock..."
+        );
+
 
         await solicitarWakeLock();
 
