@@ -410,3 +410,13 @@ export function anteriorPostura() {
     );
 
 }
+
+/* ==========================================
+   CONSULTA DE POSTURA ACTIVA
+========================================== */
+
+export function obtenerPosturaActiva() {
+
+    return POSTURES[posturaActiva];
+
+}

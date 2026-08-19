@@ -1,53 +1,338 @@
-#settings-overlay{
+/* ==========================================================
+   DIÁLOGOS
+   Proyecto: Saludo-al-Sol
+   ========================================================== */
 
-    position:fixed;
 
-    inset:0;
+/* ==========================================================
+   DIÁLOGO DE CONFIGURACIÓN
+   ========================================================== */
 
-    background:rgba(0,0,0,.45);
+#settings-overlay {
 
-    display:flex;
+    position: fixed;
 
-    justify-content:center;
+    inset: 0;
 
-    align-items:center;
+    display: flex;
 
-    z-index:5000;
+    justify-content: center;
 
-}
+    align-items: center;
 
-#settings-window{
+    padding: 24px;
 
-    background:white;
+    background: rgba(0, 0, 0, .45);
 
-    border-radius:18px;
-
-    padding:30px;
-
-    width:360px;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.25);
+    z-index: 5000;
 
 }
 
-#settings-window h2{
 
-    margin-top:0;
+#settings-window {
 
-    text-align:center;
+    width: 360px;
+
+    max-width: 100%;
+
+    max-height:
+        calc(100vh - 48px);
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+
+    padding: 30px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, .25);
 
 }
 
-#breathing-options{
 
-    margin:20px 0;
+#settings-window h2 {
+
+    margin-top: 0;
+
+    text-align: center;
 
 }
 
-.settings-buttons{
 
-    display:flex;
+#breathing-options {
 
-    justify-content:space-between;
+    margin: 20px 0;
+
+}
+
+
+.settings-buttons {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+}
+
+
+/* ==========================================================
+   MENSAJE DE SESIÓN
+   ========================================================== */
+
+/*
+ * IMPORTANTE:
+ *
+ * #session-message es directamente la ventana blanca.
+ *
+ * No utilizamos ::before ni ::after.
+ *
+ * El sombreado de toda la pantalla se consigue mediante
+ * un box-shadow exterior.
+ *
+ * Esto evita problemas de z-index y garantiza que el texto
+ * permanezca siempre dentro y por encima de la ventana.
+ */
+
+
+/* ==========================================================
+   VENTANA DEL MENSAJE
+   ========================================================== */
+
+#session-message {
+
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    width:
+        min(
+            560px,
+            calc(100vw - 48px)
+        );
+
+    max-height:
+        calc(
+            100vh - 48px
+        );
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+
+    padding: 32px;
+
+    /*
+     * Ventana blanca
+     */
+
+    background: #ffffff;
+
+    /*
+     * Borde igual al diálogo de configuración
+     */
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 18px;
+
+    /*
+     * Sombra propia de la ventana
+     */
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, .25),
+
+        /*
+         * Esta segunda sombra cubre toda la pantalla
+         * y funciona como fondo oscurecido.
+         *
+         * No afecta al contenido del panel.
+         */
+
+        0 0 0 100vmax rgba(0, 0, 0, .45);
+
+    /*
+     * Texto
+     */
+
+    color: #2d2623;
+
+    font-family:
+        "Outfit",
+        sans-serif;
+
+    font-size: 1.15rem;
+
+    font-weight: 400;
+
+    line-height: 1.6;
+
+    text-align: center;
+
+    /*
+     * Evita que palabras o textos largos
+     * salgan fuera de la ventana.
+     */
+
+    overflow-wrap: break-word;
+
+    word-wrap: break-word;
+
+    /*
+     * La ventana está por encima de toda
+     * la aplicación.
+     */
+
+    z-index: 5001;
+
+    /*
+     * Estado inicial oculto.
+     */
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+
+}
+
+
+/* ==========================================================
+   MENSAJE VISIBLE
+   ========================================================== */
+
+#session-message.visible {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+}
+
+
+/* ==========================================================
+   ACCESIBILIDAD
+   ========================================================== */
+
+#session-message[aria-hidden="true"] {
+
+    pointer-events: none;
+
+}
+
+
+/* ==========================================================
+   MÓVIL
+   ========================================================== */
+
+@media (max-width: 600px) {
+
+    #session-message {
+
+        width:
+            calc(
+                100vw - 32px
+            );
+
+        max-height:
+            calc(
+                100vh - 32px
+            );
+
+        padding:
+            24px 20px;
+
+        border-radius: 16px;
+
+        font-size: 1rem;
+
+        line-height: 1.5;
+
+        /*
+         * Mantiene el sombreado completo
+         * también en móvil.
+         */
+
+        box-shadow:
+            0 12px 30px rgba(0, 0, 0, .25),
+            0 0 0 100vmax rgba(0, 0, 0, .45);
+
+    }
+
+}
+
+
+/* ==========================================================
+   MÓVILES MUY PEQUEÑOS
+   ========================================================== */
+
+@media (max-width: 380px) {
+
+    #session-message {
+
+        width:
+            calc(
+                100vw - 24px
+            );
+
+        max-height:
+            calc(
+                100vh - 24px
+            );
+
+        padding:
+            20px 16px;
+
+        border-radius: 14px;
+
+        font-size: .95rem;
+
+        line-height: 1.45;
+
+        box-shadow:
+            0 10px 25px rgba(0, 0, 0, .25),
+            0 0 0 100vmax rgba(0, 0, 0, .45);
+
+    }
+
+}
+
+
+/* ==========================================================
+   PANTALLAS CON POCA ALTURA
+   ========================================================== */
+
+@media (max-height: 500px) {
+
+    #session-message {
+
+        max-height:
+            calc(
+                100vh - 24px
+            );
+
+        padding: 20px;
+
+    }
 
 }

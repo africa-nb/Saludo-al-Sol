@@ -13,7 +13,8 @@ import {
     siguientePostura,
     activarPostura,
     reiniciarPosturas,
-    notificarCambioPostura
+    notificarCambioPostura,
+    obtenerPosturaActiva
 } from "./postures.js";
 
 
@@ -157,7 +158,8 @@ async function iniciarPreparacion(id) {
     const locucion =
         hablar(
             // "Para comenzar ponte en la postura de la montaña e inhala."
-            "Colocate de pie en postura de la montaña, con los pies firmes sobre la esterilla, la espalda estirada y los brazos relajados a los lados del cuerpo. Prepárate para comenzar el Saludo al Sol. Sigue las posturas de la imagen y escucha mi voz. Te indicaré cuándo inhalar, exhalar o retener. Inhala y comenzamos."
+            "Colocate de pie en postura de la montaña, con los pies firmes sobre la esterilla, la espalda estirada y los brazos relajados a los lados del cuerpo. Prepárate para comenzar el Saludo al Sol. Sigue las posturas de la imagen y escucha mi voz. Te indicaré cuándo inhalar, exhalar o retener. Inhala y comenzamos.",
+            true
         );
 
     /*
@@ -334,6 +336,21 @@ export function reanudarSesion() {
 export function finalizarSesion() {
 
     /*
+     * Guardamos los datos de la sesión
+     * ANTES de reiniciar nada.
+     */
+
+    const ciclos =
+        obtenerCiclos();
+
+    const tiempo =
+        obtenerTiempoSesion();
+
+    const postura =
+        obtenerPosturaActiva();
+
+
+    /*
      * Invalidamos cualquier preparación
      * que pudiera estar pendiente.
      */
@@ -344,9 +361,51 @@ export function finalizarSesion() {
 
     temporizador = null;
 
-    estado = SESSION_STATE.STOPPED;
+
+    /*
+     * Finalizamos el estado de la sesión.
+     */
+
+    estado =
+        SESSION_STATE.STOPPED;
 
     notificarCambioEstado();
+
+
+    /*
+     * Comunicamos el resultado de la sesión
+     * antes de reiniciar sus datos.
+     */
+
+    document.dispatchEvent(
+
+        new CustomEvent(
+            EVENTS.SESSION_FINISHED,
+
+            {
+                detail: {
+
+                    ciclos,
+
+                    tiempo,
+
+                    postura:
+                        postura
+                            ? postura.name
+                            : ""
+
+                }
+            }
+        )
+
+    );
+
+
+    /*
+     * Ahora sí detenemos y reiniciamos
+     * la sesión para dejarla preparada
+     * para un nuevo START.
+     */
 
     detenerCronometro();
 
@@ -354,10 +413,25 @@ export function finalizarSesion() {
 
     reiniciarCiclos();
 
-    console.log("■ Sesión finalizada");
+
+    console.log(
+        "■ Sesión finalizada",
+        {
+            ciclos,
+            tiempo,
+            postura:
+                postura
+                    ? postura.name
+                    : ""
+        }
+    );
 
 }
 
+
+/* ==========================================
+   SESIÓN COMPLETADA
+========================================== */
 
 /* ==========================================
    SESIÓN COMPLETADA
@@ -367,12 +441,36 @@ function completarSesion() {
 
     clearTimeout(temporizador);
 
-    const ciclos = obtenerCiclos();
-    const tiempo = obtenerTiempoSesion();
 
-    estado = SESSION_STATE.STOPPED;
+    /*
+     * Guardamos los datos de la sesión
+     * antes de reiniciar nada.
+     */
+
+    const ciclos =
+        obtenerCiclos();
+
+    const tiempo =
+        obtenerTiempoSesion();
+
+    const postura =
+        obtenerPosturaActiva();
+
+
+    /*
+     * La sesión ha terminado
+     * al completar el ciclo previsto.
+     */
+
+    estado =
+        SESSION_STATE.STOPPED;
 
     notificarCambioEstado();
+
+
+    /*
+     * Comunicamos el resultado completo.
+     */
 
     document.dispatchEvent(
 
@@ -385,7 +483,13 @@ function completarSesion() {
                 detail: {
 
                     ciclos,
-                    tiempo
+
+                    tiempo,
+
+                    postura:
+                        postura
+                            ? postura.name
+                            : ""
 
                 }
 
@@ -394,6 +498,13 @@ function completarSesion() {
         )
 
     );
+
+
+    /*
+     * Ahora sí detenemos el cronómetro
+     * y dejamos las posturas preparadas
+     * para una nueva sesión.
+     */
 
     detenerCronometro();
 

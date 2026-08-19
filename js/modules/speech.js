@@ -1,6 +1,7 @@
 /**
  * =====================================================
  * MOTOR DE VOZ
+ * Proyecto: Saludo-al-Sol
  * =====================================================
  */
 
@@ -8,25 +9,145 @@
 
 import { EVENTS } from "./events.js";
 
-/* ==========================================
+
+/* =====================================================
    ESTADO
-========================================== */
+===================================================== */
 
 let sesionActiva = false;
 
-/* ==========================================
+
+/* =====================================================
+   ELEMENTO DEL MENSAJE EN PANTALLA
+===================================================== */
+
+/*
+ * El mensaje de sesión utiliza un único elemento.
+ *
+ * No existe un overlay y una ventana independientes.
+ *
+ * El propio #session-message funciona como:
+ *
+ * - fondo oscurecido
+ * - contenedor del diálogo
+ * - elemento accesible para lectores de pantalla
+ *
+ * dialogs.css genera visualmente la ventana interior
+ * mediante ::before.
+ */
+
+function obtenerPanelMensaje() {
+
+    return document.getElementById(
+        "session-message"
+    );
+
+}
+
+
+/* =====================================================
+   MOSTRAR MENSAJE EN PANTALLA
+===================================================== */
+
+export function mostrarMensaje(texto) {
+
+    const panel =
+        obtenerPanelMensaje();
+
+
+    if (!panel) {
+
+        console.warn(
+            "No existe #session-message"
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Colocamos directamente el texto
+     * dentro del panel.
+     */
+
+    panel.textContent =
+        texto;
+
+
+    /*
+     * Indicamos que el mensaje
+     * está visible.
+     */
+
+    panel.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    panel.classList.add(
+        "visible"
+    );
+
+}
+
+
+/* =====================================================
+   OCULTAR MENSAJE EN PANTALLA
+===================================================== */
+
+export function ocultarMensaje() {
+
+    const panel =
+        obtenerPanelMensaje();
+
+
+    if (!panel) {
+        return;
+    }
+
+
+    /*
+     * Ocultamos el panel.
+     */
+
+    panel.classList.remove(
+        "visible"
+    );
+
+
+    panel.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    /*
+     * Limpiamos el texto.
+     */
+
+    panel.textContent =
+        "";
+
+}
+
+
+/* =====================================================
    EVENTOS
-========================================== */
+===================================================== */
 
 document.addEventListener(
     EVENTS.SESSION_STATE_CHANGED,
     manejarCambioEstado
 );
 
+
 document.addEventListener(
     EVENTS.POSTURE_CHANGED,
     manejarCambioPostura
 );
+
 
 document.addEventListener(
     EVENTS.SESSION_FINISHED,
@@ -34,15 +155,45 @@ document.addEventListener(
 );
 
 
-/* ==========================================
+/* =====================================================
    ESTADO DE LA SESIÓN
-========================================== */
+===================================================== */
 
 function manejarCambioEstado(evento) {
 
-    const estado = evento.detail.estado;
+    const estado =
+        evento.detail.estado;
 
-    sesionActiva = estado === "RUNNING";
+
+    /*
+     * Solo consideramos activa la sesión
+     * cuando está realmente RUNNING.
+     */
+
+    sesionActiva =
+        estado === "RUNNING";
+
+
+    /*
+     * Si la sesión deja de estar activa,
+     * cancelamos cualquier indicación
+     * respiratoria pendiente.
+     *
+     * El mensaje final se gestiona
+     * independientemente mediante
+     * SESSION_FINISHED.
+     */
+
+    if (!sesionActiva) {
+
+        /*
+         * No ocultamos aquí el mensaje final,
+         * porque SESSION_FINISHED puede haber
+         * sido emitido inmediatamente antes.
+         */
+
+    }
+
 
     console.log(
         "🔊 Estado de voz:",
@@ -51,9 +202,10 @@ function manejarCambioEstado(evento) {
 
 }
 
-/* ==========================================
+
+/* =====================================================
    CAMBIO DE POSTURA
-========================================== */
+===================================================== */
 
 function manejarCambioPostura(evento) {
 
@@ -61,60 +213,123 @@ function manejarCambioPostura(evento) {
         return;
     }
 
+
     const respiracion =
         evento.detail.respiracion;
+
 
     console.log(
         "🔵 Speech - respiración:",
         respiracion
     );
 
-    let indicacion = "";
+
+    let indicacion =
+        "";
+
 
     switch (respiracion) {
 
         case "inhale":
 
-            indicacion = "Inhala";
+            indicacion =
+                "Inhala";
+
             break;
+
 
         case "exhale":
 
-            indicacion = "Exhala";
+            indicacion =
+                "Exhala";
+
             break;
+
 
         case "hold":
 
-            indicacion = "Retén";
+            indicacion =
+                "Retén";
+
             break;
+
 
         default:
 
             return;
+
     }
 
-    hablar(indicacion);
+
+    /*
+     * Las indicaciones respiratorias
+     * son únicamente de voz.
+     *
+     * NO se muestran en el panel.
+     *
+     * La tarjeta de la postura activa
+     * ya muestra visualmente la
+     * indicación correspondiente.
+     */
+
+    hablar(
+        indicacion
+    );
 
 }
 
-/* ==========================================
-   SÍNTESIS DE VOZ
-========================================== */
 
-export function hablar(texto) {
+/* =====================================================
+   SÍNTESIS DE VOZ
+===================================================== */
+
+/*
+ * @param {string} texto
+ * @param {boolean} mostrarEnPantalla
+ *
+ * mostrarEnPantalla:
+ *
+ * false → solo voz
+ *
+ * true  → voz + mensaje visual
+ */
+
+export function hablar(
+    texto,
+    mostrarEnPantalla = false
+) {
 
     return new Promise(resolve => {
 
-        /*
-         * Comprobamos que el navegador
-         * dispone de síntesis de voz.
-         */
 
-        if (!("speechSynthesis" in window)) {
+        /* ==============================================
+           COMPROBAR DISPONIBILIDAD
+        ============================================== */
+
+        if (
+            !(
+                "speechSynthesis"
+                in window
+            )
+        ) {
 
             console.warn(
                 "La síntesis de voz no está disponible"
             );
+
+
+            /*
+             * Si este mensaje debía mostrarse,
+             * nos aseguramos de no dejar ningún
+             * panel visible.
+             */
+
+            if (mostrarEnPantalla) {
+
+                ocultarMensaje();
+
+            }
+
 
             resolve();
 
@@ -122,38 +337,100 @@ export function hablar(texto) {
 
         }
 
+
+        /* ==============================================
+           CANCELAR LOCUCIÓN ANTERIOR
+        ============================================== */
+
         /*
-         * Si hubiera una locución anterior,
-         * la cancelamos antes de comenzar
-         * la nueva.
+         * Solo puede existir una locución activa
+         * al mismo tiempo.
          */
 
         window.speechSynthesis.cancel();
 
+
+        /* ==============================================
+           CREAR LOCUCIÓN
+        ============================================== */
+
         const mensaje =
-            new SpeechSynthesisUtterance(texto);
+            new SpeechSynthesisUtterance(
+                texto
+            );
 
-        mensaje.lang = "es-ES";
 
-        mensaje.rate = 1;
-        mensaje.pitch = 1;
-        mensaje.volume = 1;
+        mensaje.lang =
+            "es-ES";
 
-        /*
-         * La Promise se resuelve cuando
-         * la locución ha terminado.
-         */
+
+        mensaje.rate =
+            1;
+
+
+        mensaje.pitch =
+            1;
+
+
+        mensaje.volume =
+            1;
+
+
+        /* ==============================================
+           COMIENZO DE LA LOCUCIÓN
+        ============================================== */
+
+        mensaje.onstart = () => {
+
+            /*
+             * El mensaje visual solo aparece
+             * si esta locución lo solicita.
+             *
+             * Por tanto:
+             *
+             * Inhala  → no
+             * Exhala  → no
+             * Retén   → no
+             * Mensaje final → sí
+             */
+
+            if (mostrarEnPantalla) {
+
+                mostrarMensaje(
+                    texto
+                );
+
+            }
+
+        };
+
+
+        /* ==============================================
+           FIN DE LA LOCUCIÓN
+        ============================================== */
 
         mensaje.onend = () => {
+
+            /*
+             * Si esta locución utilizaba
+             * el panel visual, lo ocultamos.
+             */
+
+            if (mostrarEnPantalla) {
+
+                ocultarMensaje();
+
+            }
+
 
             resolve();
 
         };
 
-        /*
-         * Si se produce un error también
-         * continuamos la sesión.
-         */
+
+        /* ==============================================
+           ERROR DE LOCUCIÓN
+        ============================================== */
 
         mensaje.onerror = () => {
 
@@ -161,55 +438,126 @@ export function hablar(texto) {
                 "Error en la síntesis de voz"
             );
 
+
+            /*
+             * Nunca dejamos el diálogo
+             * bloqueado si la voz falla.
+             */
+
+            if (mostrarEnPantalla) {
+
+                ocultarMensaje();
+
+            }
+
+
             resolve();
 
         };
 
-        window.speechSynthesis.speak(mensaje);
+
+        /* ==============================================
+           INICIAR LOCUCIÓN
+        ============================================== */
+
+        window.speechSynthesis.speak(
+            mensaje
+        );
 
     });
 
 }
 
-/* ==========================================
-   GESTIÓN DEL FIN DE LA SESIÓN  
-========================================== */
+
+/* =====================================================
+   GESTIÓN DEL FIN DE LA SESIÓN
+===================================================== */
 
 function manejarFinSesion(evento) {
 
-    const ciclos = evento.detail.ciclos;
-    const tiempo = evento.detail.tiempo;
+    const ciclos =
+        evento.detail.ciclos;
+
+
+    const tiempo =
+        evento.detail.tiempo;
+
+
+    const postura =
+        evento.detail.postura;
+
 
     console.log(
-        "🔊 Sesión completada:",
+        "🔊 Sesión finalizada:",
         ciclos,
         "ciclos en",
         tiempo,
-        "ms"
+        "ms",
+        "postura:",
+        postura
     );
 
+
+    /*
+     * Creamos el mensaje final.
+     */
+
+    const mensajeFinal =
+        crearMensajeFinal(
+            postura,
+            ciclos,
+            tiempo
+        );
+
+
+    /*
+     * El mensaje final:
+     *
+     * 1. Se muestra en pantalla.
+     * 2. Se pronuncia.
+     * 3. Permanece visible mientras habla.
+     * 4. Desaparece al terminar.
+     */
+
     hablar(
-        crearMensajeFinal(ciclos, tiempo)
+        mensajeFinal,
+        true
     );
 
 }
 
 
-/* ==========================================
-   SÍNTESIS DE VOZ (creación del mensaje final)
-========================================== */
-function crearMensajeFinal(ciclos, tiempo) {
+/* =====================================================
+   CREACIÓN DEL MENSAJE FINAL
+===================================================== */
+
+function crearMensajeFinal(
+    postura,
+    ciclos,
+    tiempo
+) {
+
+    /* ==================================================
+       CONVERSIÓN DEL TIEMPO
+    ================================================== */
 
     const totalSegundos =
-        Math.floor(tiempo / 1000);
+        Math.floor(
+            tiempo / 1000
+        );
+
 
     const horas =
-        Math.floor(totalSegundos / 3600);
+        Math.floor(
+            totalSegundos / 3600
+        );
+
 
     const minutos =
         Math.floor(
             (totalSegundos % 3600) / 60
         );
+
 
     const segundos =
         totalSegundos % 60;
@@ -218,55 +566,92 @@ function crearMensajeFinal(ciclos, tiempo) {
     let partes = [];
 
 
+    /* ==================================================
+       HORAS
+    ================================================== */
+
     if (horas > 0) {
 
         partes.push(
+
             `${horas} ${
                 horas === 1
                     ? "hora"
                     : "horas"
             }`
+
         );
 
     }
 
 
+    /* ==================================================
+       MINUTOS
+    ================================================== */
+
     if (minutos > 0) {
 
         partes.push(
+
             `${minutos} ${
                 minutos === 1
                     ? "minuto"
                     : "minutos"
             }`
+
         );
 
     }
 
 
-    if (segundos > 0 || partes.length === 0) {
+    /* ==================================================
+       SEGUNDOS
+    ================================================== */
+
+    if (
+        segundos > 0 ||
+        partes.length === 0
+    ) {
 
         partes.push(
+
             `${segundos} ${
                 segundos === 1
                     ? "segundo"
                     : "segundos"
             }`
+
         );
 
     }
 
 
-    const duracion =
-        partes.join(" y ");
+    /* ==================================================
+       DURACIÓN
+    ================================================== */
 
+    const duracion =
+        partes.join(
+            " y "
+        );
+
+
+    /* ==================================================
+       SALUDOS COMPLETADOS
+    ================================================== */
 
     const saludos =
         ciclos === 1
+
             ? "1 Saludo al Sol"
+
             : `${ciclos} Saludos al Sol`;
 
 
-    return `Has completado ${saludos} en ${duracion}.`;
+    /* ==================================================
+       MENSAJE FINAL
+    ================================================== */
+
+    return `Sesión finalizada en ${postura}. Has completado ${saludos} en ${duracion}.`;
 
 }
