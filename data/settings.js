@@ -1,6 +1,7 @@
 /**
  * =====================================================
  * CONFIGURACIÓN GLOBAL
+ * Proyecto: Saludo-al-Sol
  * =====================================================
  */
 
@@ -8,10 +9,17 @@
 
 export const SETTINGS = {
 
-    // Duración de una respiración (segundos)
+    /*
+     * Duración de cada postura/respiración
+     * en segundos.
+     */
     breathingTime: 4,
 
-    // Valores permitidos para la duración de la respiración
+
+    /*
+     * Valores permitidos para la duración
+     * de la respiración.
+     */
     breathingOptions: [
         2,
         3,
@@ -26,28 +34,35 @@ export const SETTINGS = {
         10
     ],
 
-    // Voz
+
+    /*
+     * Activar o desactivar las indicaciones
+     * mediante síntesis de voz.
+     */
     speech: true,
 
-    // Sonidos
-    sounds: true,
 
-    // Cuenta atrás inicial
-    countdown: true,
-
-    // Número de ciclos (0 = infinito)
+    /*
+     * Número de ciclos de la práctica.
+     *
+     * 0 = práctica indefinida.
+     */
     totalCycles: 0,
 
-    //Valores permitidos para el número de ciclos
+
+    /*
+     * Valores permitidos para el número
+     * de ciclos.
+     */
     cycleOptions: [
-    0,
-    3,
-    6,
-    9,
-    12,
-    27,
-    54,
-    108
-]
+        0,
+        3,
+        6,
+        9,
+        12,
+        27,
+        54,
+        108
+    ]
 
 };
