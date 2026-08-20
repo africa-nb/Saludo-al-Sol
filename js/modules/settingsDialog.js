@@ -1,4 +1,3 @@
-
 /**
  * =====================================================
  * DIÁLOGO DE CONFIGURACIÓN
@@ -19,7 +18,8 @@ import { actualizarTiempoRespiracion } from "./session.js";
 
 export function abrirConfiguracion() {
 
-    const dialogs = document.getElementById("dialogs");
+    const dialogs =
+        document.getElementById("dialogs");
 
     dialogs.innerHTML = `
 
@@ -60,9 +60,11 @@ export function abrirConfiguracion() {
        TIEMPO DE RESPIRACIÓN
     ========================================== */
 
-    const opciones = document.getElementById(
-        "breathing-options"
-    );
+    const opciones =
+        document.getElementById(
+            "breathing-options"
+        );
+
 
     SETTINGS.breathingOptions.forEach(valor => {
 
@@ -74,11 +76,17 @@ export function abrirConfiguracion() {
                     type="radio"
                     name="breathing"
                     value="${valor}"
-                    ${valor === SETTINGS.breathingTime ? "checked" : ""}>
+                    ${
+                        valor === SETTINGS.breathingTime
+                            ? "checked"
+                            : ""
+                    }>
 
                 ${valor} segundos
 
-            </label><br>
+            </label>
+
+            <br>
 
         `;
 
@@ -89,9 +97,11 @@ export function abrirConfiguracion() {
        NÚMERO DE CICLOS
     ========================================== */
 
-    const cycleOptions = document.getElementById(
-        "cycle-options"
-    );
+    const cycleOptions =
+        document.getElementById(
+            "cycle-options"
+        );
+
 
     SETTINGS.cycleOptions.forEach(valor => {
 
@@ -103,18 +113,30 @@ export function abrirConfiguracion() {
                     type="radio"
                     name="cycles"
                     value="${valor}"
-                    ${valor === SETTINGS.totalCycles ? "checked" : ""}>
+                    ${
+                        valor === SETTINGS.totalCycles
+                            ? "checked"
+                            : ""
+                    }>
 
-                ${valor === 0
-                    ? "Infinito"
-                    : `${valor} saludos`}
+                ${
+                    valor === 0
+                        ? "Infinito"
+                        : `${valor} saludos`
+                }
 
-            </label><br>
+            </label>
+
+            <br>
 
         `;
 
     });
 
+
+    /* ==========================================
+       BOTÓN CANCELAR
+    ========================================== */
 
     document
         .getElementById("btn-cancel")
@@ -123,6 +145,10 @@ export function abrirConfiguracion() {
             cerrarConfiguracion
         );
 
+
+    /* ==========================================
+       BOTÓN GUARDAR
+    ========================================== */
 
     document
         .getElementById("btn-save")
@@ -140,52 +166,93 @@ export function abrirConfiguracion() {
 
 function cerrarConfiguracion() {
 
-    document.getElementById("dialogs").innerHTML = "";
+    document.getElementById(
+        "dialogs"
+    ).innerHTML = "";
 
 }
 
 
 /* ==========================================
-   GUARDAR
+   GUARDAR CONFIGURACIÓN
 ========================================== */
 
 function guardarConfiguracion() {
 
-    const seleccionTiempo = document.querySelector(
-        "input[name='breathing']:checked"
-    );
-
-    const seleccionSaludos = document.querySelector(
-        "input[name='cycles']:checked"
-    );
+    const seleccionTiempo =
+        document.querySelector(
+            "input[name='breathing']:checked"
+        );
 
 
-    const nuevoTiempo = Number(
-        seleccionTiempo.value
-    );
+    const seleccionSaludos =
+        document.querySelector(
+            "input[name='cycles']:checked"
+        );
 
-    const nuevosSaludos = Number(
-        seleccionSaludos.value
-    );
+
+    if (
+        !seleccionTiempo ||
+        !seleccionSaludos
+    ) {
+
+        return;
+
+    }
+
+
+    const nuevoTiempo =
+        Number(
+            seleccionTiempo.value
+        );
+
+
+    const nuevosSaludos =
+        Number(
+            seleccionSaludos.value
+        );
 
 
     const cambiaTiempo =
-        nuevoTiempo !== SETTINGS.breathingTime;
+        nuevoTiempo !==
+        SETTINGS.breathingTime;
+
 
     const cambiaSaludos =
-        nuevosSaludos !== SETTINGS.totalCycles;
+        nuevosSaludos !==
+        SETTINGS.totalCycles;
 
 
-    SETTINGS.breathingTime = nuevoTiempo;
+    /* ==========================================
+       ACTUALIZAR CONFIGURACIÓN
+    ========================================== */
 
-    SETTINGS.totalCycles = nuevosSaludos;
+    SETTINGS.breathingTime =
+        nuevoTiempo;
+
+    SETTINGS.totalCycles =
+        nuevosSaludos;
 
 
-    guardarSettings(SETTINGS);
+    /* ==========================================
+       GUARDAR EN ALMACENAMIENTO
+    ========================================== */
 
+    guardarSettings(
+        SETTINGS
+    );
+
+
+    /* ==========================================
+       CERRAR DIÁLOGO
+    ========================================== */
 
     cerrarConfiguracion();
 
+
+    /* ==========================================
+       ACTUALIZAR CONTADOR
+    ========================================== */
 
     if (cambiaSaludos) {
 
@@ -193,6 +260,10 @@ function guardarConfiguracion() {
 
     }
 
+
+    /* ==========================================
+       ACTUALIZAR RESPIRACIÓN
+    ========================================== */
 
     if (cambiaTiempo) {
 
