@@ -419,3 +419,972 @@ body:has(#session-message.visible)::after {
     }
 
 }
+
+
+
+/* =====================================================
+   DIÁLOGO DE ESTADÍSTICAS
+   Proyecto: Saludo-al-Sol
+===================================================== */
+
+
+/* =====================================================
+   OVERLAY
+===================================================== */
+
+#statistics-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+
+    background:
+        rgba(0, 0, 0, .45);
+
+    z-index: 5000;
+
+}
+
+
+/* =====================================================
+   VENTANA
+===================================================== */
+
+#statistics-window {
+
+    width:
+        min(820px, 100%);
+
+    max-height:
+        calc(100vh - 48px);
+
+    overflow-y:
+        auto;
+
+    overflow-x:
+        hidden;
+
+    box-sizing: border-box;
+
+    padding:
+        30px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        18px;
+
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, .25);
+
+    -webkit-overflow-scrolling:
+        touch;
+
+}
+
+
+/* =====================================================
+   CABECERA
+===================================================== */
+
+.statistics-header {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        16px;
+
+    margin-bottom:
+        26px;
+
+}
+
+
+.statistics-title {
+
+    margin:
+        0;
+
+    font-size:
+        1.5rem;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.2;
+
+}
+
+
+.statistics-close {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    width:
+        40px;
+
+    height:
+        40px;
+
+    padding:
+        0;
+
+    border:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+        transparent;
+
+    color:
+        inherit;
+
+    cursor:
+        pointer;
+
+}
+
+
+.statistics-close:hover {
+
+    background:
+        rgba(0, 0, 0, .06);
+
+}
+
+
+.statistics-close:focus-visible {
+
+    outline:
+        2px solid
+        currentColor;
+
+    outline-offset:
+        2px;
+
+}
+
+
+.statistics-close .toolbar-icon {
+
+    width:
+        22px;
+
+    height:
+        22px;
+
+}
+
+
+/* =====================================================
+   CONTENIDO
+===================================================== */
+
+.statistics-content {
+
+    width:
+        100%;
+
+}
+
+
+/* =====================================================
+   SECCIONES
+===================================================== */
+
+.statistics-section {
+
+    margin-bottom:
+        28px;
+
+}
+
+
+.statistics-section:last-child {
+
+    margin-bottom:
+        0;
+
+}
+
+
+.statistics-section-title {
+
+    margin:
+        0 0 14px 0;
+
+    font-size:
+        1.05rem;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.3;
+
+}
+
+
+/* =====================================================
+   TARJETAS
+===================================================== */
+
+.statistics-cards {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        12px;
+
+}
+
+
+.statistics-card {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-width:
+        0;
+
+    min-height:
+        94px;
+
+    padding:
+        14px 10px;
+
+    box-sizing:
+        border-box;
+
+    text-align:
+        center;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        12px;
+
+    background:
+        var(--panel-background);
+
+}
+
+
+.statistics-card-value {
+
+    display:
+        block;
+
+    margin-bottom:
+        6px;
+
+    font-size:
+        1.45rem;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.2;
+
+}
+
+
+.statistics-card-label {
+
+    display:
+        block;
+
+    font-size:
+        .82rem;
+
+    line-height:
+        1.25;
+
+    opacity:
+        .75;
+
+}
+
+
+/* =====================================================
+   PRÁCTICAS RECIENTES
+===================================================== */
+
+.statistics-recent {
+
+    margin-top:
+        20px;
+
+}
+
+
+.statistics-recent h4 {
+
+    margin:
+        0 0 10px 0;
+
+    font-size:
+        .95rem;
+
+    font-weight:
+        600;
+
+}
+
+
+.statistics-recent-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        8px;
+
+}
+
+
+.statistics-recent-item {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        16px;
+
+    min-height:
+        52px;
+
+    padding:
+        10px 12px;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        10px;
+
+    background:
+        var(--panel-background);
+
+}
+
+
+.statistics-recent-main {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    min-width:
+        0;
+
+    gap:
+        3px;
+
+}
+
+
+.statistics-recent-main strong {
+
+    font-size:
+        .86rem;
+
+}
+
+
+.statistics-recent-main span {
+
+    font-size:
+        .88rem;
+
+}
+
+
+.statistics-recent-secondary {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    flex-shrink:
+        0;
+
+    font-size:
+        .8rem;
+
+}
+
+
+.statistics-session-type {
+
+    padding:
+        3px 7px;
+
+    border-radius:
+        6px;
+
+    font-size:
+        .72rem;
+
+    font-weight:
+        500;
+
+}
+
+
+.statistics-session-type.completed {
+
+    background:
+        rgba(70, 140, 80, .12);
+
+}
+
+
+.statistics-session-type.stopped {
+
+    background:
+        rgba(180, 120, 60, .12);
+
+}
+
+
+/* =====================================================
+   RESUMEN MENSUAL
+===================================================== */
+
+.statistics-month-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        10px;
+
+}
+
+
+.statistics-month {
+
+    padding:
+        14px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        12px;
+
+    background:
+        var(--panel-background);
+
+}
+
+
+.statistics-month-header h4 {
+
+    margin:
+        0 0 12px 0;
+
+    font-size:
+        .95rem;
+
+    font-weight:
+        600;
+
+}
+
+
+.statistics-month-data {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap:
+        10px;
+
+}
+
+
+.statistics-month-item {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        4px;
+
+}
+
+
+.statistics-month-item span {
+
+    font-size:
+        .76rem;
+
+    opacity:
+        .7;
+
+}
+
+
+.statistics-month-item strong {
+
+    font-size:
+        .95rem;
+
+    font-weight:
+        600;
+
+}
+
+
+/* =====================================================
+   SIN DATOS
+===================================================== */
+
+.statistics-empty {
+
+    padding:
+        24px 16px;
+
+    margin:
+        0;
+
+    text-align:
+        center;
+
+    font-size:
+        .92rem;
+
+    line-height:
+        1.4;
+
+    opacity:
+        .7;
+
+}
+
+
+/* =====================================================
+   ANDROID / TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+    #statistics-overlay {
+
+        padding:
+            20px;
+
+    }
+
+
+    #statistics-window {
+
+        width:
+            min(700px, 100%);
+
+        max-height:
+            calc(100vh - 40px);
+
+        padding:
+            22px;
+
+    }
+
+
+    .statistics-cards {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        gap:
+            10px;
+
+    }
+
+
+    .statistics-month-data {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   MÓVIL ANDROID
+===================================================== */
+
+@media (max-width: 600px) {
+
+    #statistics-overlay {
+
+        padding:
+            16px;
+
+    }
+
+
+    #statistics-window {
+
+        width:
+            100%;
+
+        max-height:
+            calc(100vh - 32px);
+
+        padding:
+            20px;
+
+        border-radius:
+            16px;
+
+    }
+
+
+    .statistics-header {
+
+        margin-bottom:
+            20px;
+
+    }
+
+
+    .statistics-title {
+
+        font-size:
+            1.3rem;
+
+    }
+
+
+    .statistics-section {
+
+        margin-bottom:
+            22px;
+
+    }
+
+
+    .statistics-section-title {
+
+        margin-bottom:
+            11px;
+
+        font-size:
+            1rem;
+
+    }
+
+
+    .statistics-cards {
+
+        gap:
+            8px;
+
+    }
+
+
+    .statistics-card {
+
+        min-height:
+            78px;
+
+        padding:
+            10px 7px;
+
+        border-radius:
+            10px;
+
+    }
+
+
+    .statistics-card-value {
+
+        margin-bottom:
+            4px;
+
+        font-size:
+            1.2rem;
+
+    }
+
+
+    .statistics-card-label {
+
+        font-size:
+            .76rem;
+
+    }
+
+
+    .statistics-recent-item {
+
+        align-items:
+            flex-start;
+
+        padding:
+            9px 10px;
+
+    }
+
+
+    .statistics-recent-secondary {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-end;
+
+        gap:
+            5px;
+
+    }
+
+
+    .statistics-month {
+
+        padding:
+            12px;
+
+    }
+
+
+    .statistics-month-data {
+
+        gap:
+            8px;
+
+    }
+
+
+    .statistics-month-item span {
+
+        font-size:
+            .72rem;
+
+    }
+
+
+    .statistics-month-item strong {
+
+        font-size:
+            .88rem;
+
+    }
+
+}
+
+
+/* =====================================================
+   MÓVIL PEQUEÑO
+===================================================== */
+
+@media (max-width: 420px) {
+
+    #statistics-overlay {
+
+        padding:
+            12px;
+
+    }
+
+
+    #statistics-window {
+
+        max-height:
+            calc(100vh - 24px);
+
+        padding:
+            16px;
+
+        border-radius:
+            14px;
+
+    }
+
+
+    .statistics-title {
+
+        font-size:
+            1.2rem;
+
+    }
+
+
+    .statistics-close {
+
+        width:
+            36px;
+
+        height:
+            36px;
+
+    }
+
+
+    .statistics-cards {
+
+        gap:
+            7px;
+
+    }
+
+
+    .statistics-card {
+
+        min-height:
+            72px;
+
+        padding:
+            8px 5px;
+
+    }
+
+
+    .statistics-card-value {
+
+        font-size:
+            1.1rem;
+
+    }
+
+
+    .statistics-card-label {
+
+        font-size:
+            .72rem;
+
+    }
+
+}
+
+
+/* =====================================================
+   MÓVIL HORIZONTAL
+===================================================== */
+
+@media (
+    max-width: 900px
+) and (
+    orientation: landscape
+) {
+
+    #statistics-window {
+
+        max-height:
+            94vh;
+
+    }
+
+}

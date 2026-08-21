@@ -67,10 +67,10 @@ export function mostrarMensaje(texto) {
     );
 
 
-    actualizarBotonConfiguracion(
+    actualizarBotonMenu(
         true
     );
-
+    
 }
 
 
@@ -104,7 +104,7 @@ export function ocultarMensaje() {
         "";
 
 
-    actualizarBotonConfiguracion(
+    actualizarBotonMenu(
         false
     );
 
@@ -761,17 +761,16 @@ function crearMensajeFinal(
 }
 
 /* =====================================================
-   actualizarBotonConfiguracion
+   ACTUALIZAR BOTÓN DEL MENÚ
 ===================================================== */
 
-
-function actualizarBotonConfiguracion(
+function actualizarBotonMenu(
     deshabilitado
 ) {
 
     const boton =
         document.getElementById(
-            "btn-settings"
+            "btn-menu"
         );
 
     if (!boton) {

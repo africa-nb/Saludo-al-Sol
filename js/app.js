@@ -29,6 +29,10 @@ import { reiniciarCiclos }
 
 import "./modules/speech.js";
 
+import { crearMenu }
+    from "./modules/menu.js";
+
+
 
 console.log("APP CARGADA");
 
@@ -55,6 +59,8 @@ document.addEventListener(
          */
 
         crearToolbar();
+
+        crearMenu();
 
         crearReloj();
 

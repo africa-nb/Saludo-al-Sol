@@ -38,6 +38,10 @@ import {
     liberarWakeLock
 } from "./wakeLock.js";
 
+import {
+    guardarSesion
+} from "../utils/storage.js";
+
 
 /* ==========================================
    ESTADOS
@@ -160,6 +164,7 @@ export function iniciarSesion() {
     );
 
 }
+
 
 /* ==========================================
    PREPARACIÓN
@@ -376,6 +381,7 @@ export function reanudarSesion() {
 
 }
 
+
 /* ==========================================
    FINALIZAR SESIÓN
 ========================================== */
@@ -395,6 +401,19 @@ export function finalizarSesion() {
 
     const postura =
         obtenerPosturaActiva();
+
+
+    /*
+     * Guardamos también la duración
+     * de la respiración utilizada durante
+     * este intento.
+     *
+     * Se almacena el valor actual y no una
+     * referencia a SETTINGS.
+     */
+
+    const breathingTime =
+        SETTINGS.breathingTime;
 
 
     /*
@@ -428,8 +447,35 @@ export function finalizarSesion() {
 
 
     /*
+     * Guardamos la sesión en el historial.
+     *
+     * "detenida" identifica que la sesión
+     * terminó manualmente mediante Finalizar.
+     */
+
+    guardarSesion({
+
+        id:
+            Date.now(),
+
+        fecha:
+            new Date().toISOString(),
+
+        ciclos,
+
+        tiempo,
+
+        breathingTime,
+
+        tipo:
+            "detenida"
+
+    });
+
+
+    /*
      * Comunicamos el resultado de la sesión
-     * antes de reiniciar sus datos.
+     * antes de reiniciar nada.
      */
 
     document.dispatchEvent(
@@ -470,7 +516,7 @@ export function finalizarSesion() {
 
 
     console.log(
-        "■ Sesión finalizada",
+        "■ Sesión detenida",
         {
             ciclos,
             tiempo,
@@ -483,10 +529,6 @@ export function finalizarSesion() {
 
 }
 
-
-/* ==========================================
-   SESIÓN COMPLETADA
-========================================== */
 
 /* ==========================================
    SESIÓN COMPLETADA
@@ -519,6 +561,15 @@ function completarSesion() {
 
 
     /*
+     * Guardamos la duración configurada
+     * para esta sesión.
+     */
+
+    const breathingTime =
+        SETTINGS.breathingTime;
+
+
+    /*
      * La sesión ha terminado
      * al completar el ciclo previsto.
      */
@@ -527,6 +578,34 @@ function completarSesion() {
         SESSION_STATE.STOPPED;
 
     notificarCambioEstado();
+
+
+    /*
+     * Guardamos la sesión en el historial.
+     *
+     * "completada" identifica que la sesión
+     * terminó automáticamente al alcanzar
+     * el número de saludos configurado.
+     */
+
+    guardarSesion({
+
+        id:
+            Date.now(),
+
+        fecha:
+            new Date().toISOString(),
+
+        ciclos,
+
+        tiempo,
+
+        breathingTime,
+
+        tipo:
+            "completada"
+
+    });
 
 
     /*
@@ -579,6 +658,7 @@ function completarSesion() {
     reiniciarCiclos();
 
 }
+
 
 /* ==========================================
    BUCLE PRINCIPAL
@@ -662,3 +742,4 @@ export function obtenerEstadoSesion() {
     return estado;
 
 }
+
