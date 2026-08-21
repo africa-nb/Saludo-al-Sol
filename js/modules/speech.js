@@ -7,6 +7,7 @@
 
 "use strict";
 
+import { SETTINGS } from "../../data/settings.js";
 import { EVENTS } from "./events.js";
 
 
@@ -16,35 +17,10 @@ import { EVENTS } from "./events.js";
 
 let sesionActiva = false;
 
-/*
- * Identifica la locución actualmente gestionada
- * por este módulo.
- *
- * Permite invalidar correctamente una locución
- * anterior cuando comienza otra.
- */
-
-let idLocucion = 0;
-
 
 /* =====================================================
    ELEMENTO DEL MENSAJE EN PANTALLA
 ===================================================== */
-
-/*
- * El mensaje de sesión utiliza un único elemento.
- *
- * No existe un overlay y una ventana independientes.
- *
- * El propio #session-message funciona como:
- *
- * - fondo oscurecido
- * - contenedor del diálogo
- * - elemento accesible para lectores de pantalla
- *
- * dialogs.css genera visualmente la ventana interior
- * mediante ::before.
- */
 
 function obtenerPanelMensaje() {
 
@@ -76,19 +52,9 @@ export function mostrarMensaje(texto) {
     }
 
 
-    /*
-     * Colocamos directamente el texto
-     * dentro del panel.
-     */
-
     panel.textContent =
         texto;
 
-
-    /*
-     * Indicamos que el mensaje
-     * está visible.
-     */
 
     panel.setAttribute(
         "aria-hidden",
@@ -118,10 +84,6 @@ export function ocultarMensaje() {
     }
 
 
-    /*
-     * Ocultamos el panel.
-     */
-
     panel.classList.remove(
         "visible"
     );
@@ -133,12 +95,87 @@ export function ocultarMensaje() {
     );
 
 
-    /*
-     * Limpiamos el texto.
-     */
-
     panel.textContent =
         "";
+
+}
+
+
+/* =====================================================
+   ESTIMACIÓN DE DURACIÓN DE LOCUCIÓN
+===================================================== */
+
+/*
+ * Cuando la voz está desactivada no podemos utilizar
+ * SpeechSynthesis para conocer la duración real.
+ *
+ * Por tanto estimamos cuánto tardaría en pronunciarse
+ * el mismo texto a velocidad normal (rate = 1).
+ *
+ * La estimación tiene en cuenta:
+ *
+ * - número de palabras
+ * - pausas producidas por la puntuación
+ *
+ * Esta duración SOLO se utiliza cuando la voz está
+ * desactivada.
+ */
+
+function estimarDuracionLocucion(texto) {
+
+    const palabras =
+        texto
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean)
+            .length;
+
+
+    /*
+     * Aproximadamente 150 palabras por minuto
+     * equivale a 400 ms por palabra.
+     */
+
+    const duracionPalabras =
+        palabras * 400;
+
+
+    /*
+     * Añadimos pequeñas pausas para que la estimación
+     * se aproxime mejor a una locución natural.
+     */
+
+    const pausasCortas =
+        (
+            texto.match(/[,;:]/g) || []
+        ).length;
+
+
+    const pausasLargas =
+        (
+            texto.match(/[.!?]/g) || []
+        ).length;
+
+
+    const duracionPausas =
+        pausasCortas * 120 +
+        pausasLargas * 350;
+
+
+    /*
+     * Pequeño margen inicial/final.
+     */
+
+    const margen =
+        500;
+
+
+    return Math.max(
+        1000,
+        duracionPalabras +
+        duracionPausas +
+        margen
+    );
 
 }
 
@@ -175,34 +212,8 @@ function manejarCambioEstado(evento) {
         evento.detail.estado;
 
 
-    /*
-     * Solo consideramos activa la sesión
-     * cuando está realmente RUNNING.
-     */
-
     sesionActiva =
         estado === "RUNNING";
-
-
-    /*
-     * Si la sesión deja de estar activa,
-     * cancelamos cualquier indicación
-     * respiratoria pendiente.
-     *
-     * El mensaje final se gestiona
-     * independientemente mediante
-     * SESSION_FINISHED.
-     */
-
-    if (!sesionActiva) {
-
-        /*
-         * No ocultamos aquí el mensaje final,
-         * porque SESSION_FINISHED puede haber
-         * sido emitido inmediatamente antes.
-         */
-
-    }
 
 
     console.log(
@@ -220,6 +231,19 @@ function manejarCambioEstado(evento) {
 function manejarCambioPostura(evento) {
 
     if (!sesionActiva) {
+        return;
+    }
+
+
+    /*
+     * Si la voz está desactivada no hacemos
+     * absolutamente ninguna locución respiratoria.
+     *
+     * La indicación visual de la postura continúa
+     * funcionando porque pertenece a postures.js.
+     */
+
+    if (!SETTINGS.speech) {
         return;
     }
 
@@ -272,14 +296,8 @@ function manejarCambioPostura(evento) {
 
 
     /*
-     * Las indicaciones respiratorias
-     * son únicamente de voz.
-     *
-     * NO se muestran en el panel.
-     *
-     * La tarjeta de la postura activa
-     * ya muestra visualmente la
-     * indicación correspondiente.
+     * Las indicaciones respiratorias son
+     * únicamente de voz.
      */
 
     hablar(
@@ -290,7 +308,7 @@ function manejarCambioPostura(evento) {
 
 
 /* =====================================================
-   SÍNTESIS DE VOZ
+   SÍNTESIS DE VOZ / MENSAJE VISUAL
 ===================================================== */
 
 /*
@@ -301,7 +319,16 @@ function manejarCambioPostura(evento) {
  *
  * false → solo voz
  *
- * true  → voz + mensaje visual
+ * true  → mensaje visual + voz
+ *
+ *
+ * IMPORTANTE:
+ *
+ * SETTINGS.speech controla ÚNICAMENTE la voz.
+ *
+ * Si mostrarEnPantalla === true, el mensaje visual
+ * siempre aparecerá, independientemente de si la voz
+ * está activada o desactivada.
  */
 
 export function hablar(
@@ -309,18 +336,64 @@ export function hablar(
     mostrarEnPantalla = false
 ) {
 
-    /*
-     * Cada llamada obtiene un identificador único.
-     *
-     * Cuando comienza una nueva locución,
-     * todas las anteriores quedan invalidadas.
-     */
-
-    const idActual =
-        ++idLocucion;
-
-
     return new Promise(resolve => {
+
+
+        /* ==============================================
+           DURACIÓN ESTIMADA
+        ============================================== */
+
+        const duracionEstimada =
+            estimarDuracionLocucion(
+                texto
+            );
+
+
+        /* ==============================================
+           VOZ DESACTIVADA
+        ============================================== */
+
+        if (!SETTINGS.speech) {
+
+            /*
+             * El mensaje visual NO depende de la voz.
+             */
+
+            if (mostrarEnPantalla) {
+
+                mostrarMensaje(
+                    texto
+                );
+
+
+                /*
+                 * Permanecemos visibles durante el tiempo
+                 * estimado que habría durado la locución.
+                 */
+
+                setTimeout(() => {
+
+                    ocultarMensaje();
+
+                    resolve();
+
+                }, duracionEstimada);
+
+                return;
+
+            }
+
+
+            /*
+             * Si no se solicita mensaje visual y la voz
+             * está desactivada, no hay nada que esperar.
+             */
+
+            resolve();
+
+            return;
+
+        }
 
 
         /* ==============================================
@@ -340,14 +413,26 @@ export function hablar(
 
 
             /*
-             * Si esta locución debía mostrar
-             * el panel, no dejamos ningún
-             * mensaje visible.
+             * Aunque la síntesis no esté disponible,
+             * el mensaje visual debe seguir funcionando.
              */
 
             if (mostrarEnPantalla) {
 
-                ocultarMensaje();
+                mostrarMensaje(
+                    texto
+                );
+
+
+                setTimeout(() => {
+
+                    ocultarMensaje();
+
+                    resolve();
+
+                }, duracionEstimada);
+
+                return;
 
             }
 
@@ -362,15 +447,6 @@ export function hablar(
         /* ==============================================
            CANCELAR LOCUCIÓN ANTERIOR
         ============================================== */
-
-        /*
-         * Solo puede existir una locución
-         * activa al mismo tiempo.
-         *
-         * El identificador anterior ya ha
-         * quedado invalidado al incrementar
-         * idLocucion.
-         */
 
         window.speechSynthesis.cancel();
 
@@ -402,40 +478,13 @@ export function hablar(
 
 
         /* ==============================================
-           COMPROBAR LOCUCIÓN ACTUAL
-        ============================================== */
-
-        function esLocucionActual() {
-
-            return (
-                idActual === idLocucion
-            );
-
-        }
-
-
-        /* ==============================================
            COMIENZO DE LA LOCUCIÓN
         ============================================== */
 
         mensaje.onstart = () => {
 
             /*
-             * Una locución anterior no puede
-             * modificar el panel de la nueva.
-             */
-
-            if (
-                !esLocucionActual()
-            ) {
-
-                return;
-
-            }
-
-
-            /*
-             * El mensaje visual solo aparece
+             * El mensaje visual aparece únicamente
              * cuando esta locución lo solicita.
              */
 
@@ -456,25 +505,9 @@ export function hablar(
 
         mensaje.onend = () => {
 
-            /*
-             * La Promise de esta locución
-             * siempre debe resolverse.
-             */
+            if (mostrarEnPantalla) {
 
-            if (
-                esLocucionActual()
-            ) {
-
-                /*
-                 * Solo la locución actual
-                 * puede modificar el panel.
-                 */
-
-                if (mostrarEnPantalla) {
-
-                    ocultarMensaje();
-
-                }
+                ocultarMensaje();
 
             }
 
@@ -485,42 +518,28 @@ export function hablar(
 
 
         /* ==============================================
-           CANCELACIÓN / ERROR
+           ERROR DE LOCUCIÓN
         ============================================== */
 
-        mensaje.onerror = () => {
+        mensaje.onerror = error => {
 
             console.warn(
-                "Error en la síntesis de voz"
+                "Error en la síntesis de voz:",
+                error
             );
 
 
             /*
-             * Una locución anterior puede
-             * haber sido cancelada porque
-             * comenzó otra.
-             *
-             * En ese caso no debe tocar
-             * el panel de la nueva locución.
+             * Si había mensaje visual, no lo dejamos
+             * bloqueado indefinidamente.
              */
 
-            if (
-                esLocucionActual()
-            ) {
+            if (mostrarEnPantalla) {
 
-                if (mostrarEnPantalla) {
-
-                    ocultarMensaje();
-
-                }
+                ocultarMensaje();
 
             }
 
-
-            /*
-             * Incluso en caso de error,
-             * nunca dejamos la Promise pendiente.
-             */
 
             resolve();
 
@@ -538,6 +557,7 @@ export function hablar(
     });
 
 }
+
 
 /* =====================================================
    GESTIÓN DEL FIN DE LA SESIÓN
@@ -581,12 +601,16 @@ function manejarFinSesion(evento) {
 
 
     /*
-     * El mensaje final:
+     * El mensaje final SIEMPRE se muestra.
      *
-     * 1. Se muestra en pantalla.
-     * 2. Se pronuncia.
-     * 3. Permanece visible mientras habla.
-     * 4. Desaparece al terminar.
+     * Si SETTINGS.speech === true:
+     *
+     *     mensaje + voz
+     *
+     * Si SETTINGS.speech === false:
+     *
+     *     mensaje durante la duración estimada
+     *     de la locución.
      */
 
     hablar(

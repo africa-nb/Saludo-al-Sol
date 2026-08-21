@@ -47,6 +47,7 @@ const ARCHIVOS_PRINCIPALES = [
     "./js/modules/cycleCounter.js",
     "./js/modules/speech.js",
     "./js/modules/events.js",
+    "./js/modules/wakeLock.js",
     "./js/modules/header.js",
     "./js/modules/footer.js",
     "./js/modules/statistics.js",

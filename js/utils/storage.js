@@ -49,6 +49,11 @@ export function cargarConfiguracion() {
          * a incorporarse desde localStorage.
          */
 
+
+        /* ======================================
+           DURACIÓN DE RESPIRACIÓN
+        ====================================== */
+
         if (
             typeof configuracion.breathingTime ===
             "number"
@@ -59,6 +64,10 @@ export function cargarConfiguracion() {
 
         }
 
+
+        /* ======================================
+           OPCIONES DE RESPIRACIÓN
+        ====================================== */
 
         if (
             Array.isArray(
@@ -72,6 +81,10 @@ export function cargarConfiguracion() {
         }
 
 
+        /* ======================================
+           NÚMERO DE CICLOS
+        ====================================== */
+
         if (
             typeof configuracion.totalCycles ===
             "number"
@@ -82,6 +95,10 @@ export function cargarConfiguracion() {
 
         }
 
+
+        /* ======================================
+           OPCIONES DE CICLOS
+        ====================================== */
 
         if (
             Array.isArray(
@@ -95,10 +112,26 @@ export function cargarConfiguracion() {
         }
 
 
+        /* ======================================
+           VOZ
+        ====================================== */
+
+        if (
+            typeof configuracion.speech ===
+            "boolean"
+        ) {
+
+            SETTINGS.speech =
+                configuracion.speech;
+
+        }
+
+
         console.log(
             "Configuración cargada:",
             SETTINGS
         );
+
 
     } catch (error) {
 
@@ -132,7 +165,10 @@ export function guardarSettings(
             settings.totalCycles,
 
         cycleOptions:
-            settings.cycleOptions
+            settings.cycleOptions,
+
+        speech:
+            settings.speech
 
     };
 

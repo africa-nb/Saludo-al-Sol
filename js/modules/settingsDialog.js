@@ -7,9 +7,15 @@
 "use strict";
 
 import { SETTINGS } from "../../data/settings.js";
-import { guardarSettings } from "../utils/storage.js";
-import { actualizarContador } from "./cycleCounter.js";
-import { actualizarTiempoRespiracion } from "./session.js";
+
+import { guardarSettings }
+    from "../utils/storage.js";
+
+import { actualizarContador }
+    from "./cycleCounter.js";
+
+import { actualizarTiempoRespiracion }
+    from "./session.js";
 
 
 /* ==========================================
@@ -19,7 +25,10 @@ import { actualizarTiempoRespiracion } from "./session.js";
 export function abrirConfiguracion() {
 
     const dialogs =
-        document.getElementById("dialogs");
+        document.getElementById(
+            "dialogs"
+        );
+
 
     dialogs.innerHTML = `
 
@@ -29,13 +38,38 @@ export function abrirConfiguracion() {
 
                 <h2>Configuración</h2>
 
+
                 <h3>Duración de la respiración</h3>
 
                 <div id="breathing-options"></div>
 
+
                 <h3>Número de Saludos al Sol</h3>
 
                 <div id="cycle-options"></div>
+
+
+                <h3>Indicaciones por voz</h3>
+
+                <div id="speech-option">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="speech-enabled"
+                            ${
+                                SETTINGS.speech
+                                    ? "checked"
+                                    : ""
+                            }>
+
+                        Activar indicaciones por voz
+
+                    </label>
+
+                </div>
+
 
                 <div class="settings-buttons">
 
@@ -66,31 +100,34 @@ export function abrirConfiguracion() {
         );
 
 
-    SETTINGS.breathingOptions.forEach(valor => {
+    SETTINGS.breathingOptions.forEach(
+        valor => {
 
-        opciones.innerHTML += `
+            opciones.innerHTML += `
 
-            <label>
+                <label>
 
-                <input
-                    type="radio"
-                    name="breathing"
-                    value="${valor}"
-                    ${
-                        valor === SETTINGS.breathingTime
-                            ? "checked"
-                            : ""
-                    }>
+                    <input
+                        type="radio"
+                        name="breathing"
+                        value="${valor}"
+                        ${
+                            valor ===
+                            SETTINGS.breathingTime
+                                ? "checked"
+                                : ""
+                        }>
 
-                ${valor} segundos
+                    ${valor} segundos
 
-            </label>
+                </label>
 
-            <br>
+                <br>
 
-        `;
+            `;
 
-    });
+        }
+    );
 
 
     /* ==========================================
@@ -103,35 +140,38 @@ export function abrirConfiguracion() {
         );
 
 
-    SETTINGS.cycleOptions.forEach(valor => {
+    SETTINGS.cycleOptions.forEach(
+        valor => {
 
-        cycleOptions.innerHTML += `
+            cycleOptions.innerHTML += `
 
-            <label>
+                <label>
 
-                <input
-                    type="radio"
-                    name="cycles"
-                    value="${valor}"
+                    <input
+                        type="radio"
+                        name="cycles"
+                        value="${valor}"
+                        ${
+                            valor ===
+                            SETTINGS.totalCycles
+                                ? "checked"
+                                : ""
+                        }>
+
                     ${
-                        valor === SETTINGS.totalCycles
-                            ? "checked"
-                            : ""
-                    }>
+                        valor === 0
+                            ? "Infinito"
+                            : `${valor} saludos`
+                    }
 
-                ${
-                    valor === 0
-                        ? "Infinito"
-                        : `${valor} saludos`
-                }
+                </label>
 
-            </label>
+                <br>
 
-            <br>
+            `;
 
-        `;
-
-    });
+        }
+    );
 
 
     /* ==========================================
@@ -191,9 +231,16 @@ function guardarConfiguracion() {
         );
 
 
+    const seleccionVoz =
+        document.getElementById(
+            "speech-enabled"
+        );
+
+
     if (
         !seleccionTiempo ||
-        !seleccionSaludos
+        !seleccionSaludos ||
+        !seleccionVoz
     ) {
 
         return;
@@ -213,6 +260,10 @@ function guardarConfiguracion() {
         );
 
 
+    const nuevaVoz =
+        seleccionVoz.checked;
+
+
     const cambiaTiempo =
         nuevoTiempo !==
         SETTINGS.breathingTime;
@@ -230,8 +281,13 @@ function guardarConfiguracion() {
     SETTINGS.breathingTime =
         nuevoTiempo;
 
+
     SETTINGS.totalCycles =
         nuevosSaludos;
+
+
+    SETTINGS.speech =
+        nuevaVoz;
 
 
     /* ==========================================
