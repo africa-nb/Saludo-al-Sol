@@ -60,14 +60,39 @@
 
     margin-top: 0;
 
+    margin-bottom: 12px;
+
     text-align: center;
+
+}
+
+
+#settings-window h3 {
+
+    margin-top: 14px;
+
+    margin-bottom: 8px;
 
 }
 
 
 #breathing-options {
 
-    margin: 20px 0;
+    margin: 10px 0;
+
+}
+
+
+#cycle-options {
+
+    margin: 10px 0;
+
+}
+
+
+#speech-option {
+
+    margin-top: 8px;
 
 }
 
@@ -394,4 +419,3 @@ body:has(#session-message.visible)::after {
     }
 
 }
-
