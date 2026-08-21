@@ -15,6 +15,9 @@ import {
     abrirEstadisticas
 } from "./statisticsDialog.js";
 
+import {
+    abrirHistorial
+} from "./historyDialog.js";
 
 
 /* ==========================================
@@ -527,30 +530,20 @@ export function crearMenu() {
     ========================================== */
 
     document
-        .getElementById(
-            "menu-history"
-        )
-        .addEventListener(
-            "click",
-            () => {
+    .getElementById(
+        "menu-history"
+    )
+    .addEventListener(
+        "click",
+        () => {
 
-                cerrarMenu();
+            cerrarMenu();
 
-                /*
-                 * El módulo de historial todavía
-                 * se implementará.
-                 */
+            abrirHistorial();
 
-                document.dispatchEvent(
+        }
+    );
 
-                    new CustomEvent(
-                        "open-history"
-                    )
-
-                );
-
-            }
-        );
 
 
     console.log(
