@@ -6,17 +6,19 @@
 
 "use strict";
 
-import { abrirConfiguracion } from "./settingsDialog.js";
-import { EVENTS } from "./events.js";
-import {
+import { abrirConfiguracion }
+    from "./settingsDialog.js";
 
+import { EVENTS }
+    from "./events.js";
+
+import {
     iniciarSesion,
     pausarSesion,
     finalizarSesion,
     reanudarSesion,
     obtenerEstadoSesion,
     SESSION_STATE
-
 } from "./session.js";
 
 
@@ -25,15 +27,33 @@ import {
 ========================================== */
 
 const PLAY_ICON = `
-<svg viewBox="0 0 24 24" class="toolbar-icon">
+<svg
+    viewBox="0 0 24 24"
+    class="toolbar-icon">
+
     <path d="M8 5 L19 12 L8 19 Z"/>
+
 </svg>
 `;
 
+
 const PAUSE_ICON = `
-<svg viewBox="0 0 24 24" class="toolbar-icon">
-    <rect x="6" y="5" width="4" height="14"/>
-    <rect x="14" y="5" width="4" height="14"/>
+<svg
+    viewBox="0 0 24 24"
+    class="toolbar-icon">
+
+    <rect
+        x="6"
+        y="5"
+        width="4"
+        height="14"/>
+
+    <rect
+        x="14"
+        y="5"
+        width="4"
+        height="14"/>
+
 </svg>
 `;
 
@@ -42,20 +62,36 @@ const PAUSE_ICON = `
    UTILIDADES
 ========================================== */
 
-function cambiarIcono(boton, icono) {
+function cambiarIcono(
+    boton,
+    icono
+) {
 
-    // Evita animar si ya tiene ese icono
-    if (boton.innerHTML.trim() === icono.trim()) {
+    /*
+     * Evitamos animar si el icono
+     * ya es el mismo.
+     */
+
+    if (
+        boton.innerHTML.trim() ===
+        icono.trim()
+    ) {
+
         return;
+
     }
+
 
     boton.style.opacity = "0";
 
+
     setTimeout(() => {
 
-        boton.innerHTML = icono;
+        boton.innerHTML =
+            icono;
 
-        boton.style.opacity = "1";
+        boton.style.opacity =
+            "1";
 
     }, 100);
 
@@ -68,56 +104,126 @@ function cambiarIcono(boton, icono) {
 
 function actualizarToolbar() {
 
-    const btnStart = document.getElementById("btn-start");
-    const btnStop = document.getElementById("btn-stop");
+    const btnStart =
+        document.getElementById(
+            "btn-start"
+        );
 
-    switch (obtenerEstadoSesion()) {
+    const btnStop =
+        document.getElementById(
+            "btn-stop"
+        );
+
+
+    if (
+        !btnStart ||
+        !btnStop
+    ) {
+
+        return;
+
+    }
+
+
+    switch (
+        obtenerEstadoSesion()
+    ) {
+
+        /* ----------------------------------
+           DETENIDA
+        ---------------------------------- */
 
         case SESSION_STATE.STOPPED:
 
-            btnStart.disabled = false;
-            btnStart.title = "Iniciar";
-            cambiarIcono(btnStart, PLAY_ICON);
+            btnStart.disabled =
+                false;
 
-            btnStop.disabled = true;
+            btnStart.title =
+                "Iniciar";
+
+            cambiarIcono(
+                btnStart,
+                PLAY_ICON
+            );
+
+            btnStop.disabled =
+                true;
 
             break;
 
+
+        /* ----------------------------------
+           PREPARANDO
+        ---------------------------------- */
 
         case SESSION_STATE.PREPARING:
 
-            btnStart.disabled = true;
-            btnStart.title = "Preparando...";
-            cambiarIcono(btnStart, PLAY_ICON);
+            btnStart.disabled =
+                true;
 
-            btnStop.disabled = true;
+            btnStart.title =
+                "Preparando...";
+
+            cambiarIcono(
+                btnStart,
+                PLAY_ICON
+            );
+
+            btnStop.disabled =
+                true;
 
             break;
 
+
+        /* ----------------------------------
+           EN MARCHA
+        ---------------------------------- */
 
         case SESSION_STATE.RUNNING:
 
-            btnStart.disabled = false;
-            btnStart.title = "Pausar";
-            cambiarIcono(btnStart, PAUSE_ICON);
+            btnStart.disabled =
+                false;
 
-            btnStop.disabled = false;
+            btnStart.title =
+                "Pausar";
+
+            cambiarIcono(
+                btnStart,
+                PAUSE_ICON
+            );
+
+            btnStop.disabled =
+                false;
 
             break;
 
 
+        /* ----------------------------------
+           PAUSADA
+        ---------------------------------- */
+
         case SESSION_STATE.PAUSED:
 
-            btnStart.disabled = false;
-            btnStart.title = "Reanudar";
-            cambiarIcono(btnStart, PLAY_ICON);
+            btnStart.disabled =
+                false;
 
-            btnStop.disabled = false;
+            btnStart.title =
+                "Reanudar";
+
+            cambiarIcono(
+                btnStart,
+                PLAY_ICON
+            );
+
+            btnStop.disabled =
+                false;
 
             break;
 
     }
+
 }
+
 
 /* ==========================================
    CREAR TOOLBAR
@@ -125,9 +231,16 @@ function actualizarToolbar() {
 
 export function crearToolbar() {
 
-    const toolbar = document.getElementById("toolbar");
+    const toolbar =
+        document.getElementById(
+            "toolbar"
+        );
 
-    if (!toolbar) return;
+
+    if (!toolbar) {
+        return;
+    }
+
 
     toolbar.innerHTML = `
 
@@ -141,6 +254,7 @@ export function crearToolbar() {
                 ${PLAY_ICON}
 
             </button>
+
 
             <button
                 id="btn-stop"
@@ -200,43 +314,62 @@ export function crearToolbar() {
 
     `;
 
+
+    /* ==========================================
+       BOTÓN INICIAR / PAUSAR / REANUDAR
+    ========================================== */
+
     document
         .getElementById("btn-start")
-        .addEventListener("click", () => {
+        .addEventListener(
+            "click",
+            () => {
 
-            switch (obtenerEstadoSesion()) {
+                switch (
+                    obtenerEstadoSesion()
+                ) {
 
-                case SESSION_STATE.STOPPED:
+                    case SESSION_STATE.STOPPED:
 
-                    iniciarSesion();
-                    break;
+                        iniciarSesion();
 
-                case SESSION_STATE.RUNNING:
+                        break;
 
-                    pausarSesion();
-                    break;
 
-                case SESSION_STATE.PAUSED:
+                    case SESSION_STATE.RUNNING:
 
-                    reanudarSesion();
-                    break;
+                        pausarSesion();
+
+                        break;
+
+
+                    case SESSION_STATE.PAUSED:
+
+                        reanudarSesion();
+
+                        break;
+
+                }
 
             }
+        );
 
-        
 
-        });
-
+    /* ==========================================
+       BOTÓN FINALIZAR
+    ========================================== */
 
     document
         .getElementById("btn-stop")
-        .addEventListener("click", () => {
+        .addEventListener(
+            "click",
+            finalizarSesion
+        );
 
-            finalizarSesion();
 
-
-        });
-
+    /* ==========================================
+       BOTÓN CONFIGURACIÓN
+    ========================================== */
 
     document
         .getElementById("btn-settings")
@@ -246,21 +379,20 @@ export function crearToolbar() {
         );
 
 
-  /*  document.addEventListener(
-
-        "session-state-changed",
-
-        actualizarToolbar
-    );
-    */
-
+    /* ==========================================
+       CAMBIOS DE ESTADO
+    ========================================== */
 
     document.addEventListener(
-
-    EVENTS.SESSION_STATE_CHANGED,
-
-    actualizarToolbar
-
+        EVENTS.SESSION_STATE_CHANGED,
+        actualizarToolbar
     );
+
+
+    /*
+     * Sincronizamos el estado inicial.
+     */
+
+    actualizarToolbar();
 
 }

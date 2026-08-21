@@ -562,14 +562,21 @@ function completarSesion() {
 
 
     /*
-     * Ahora sí detenemos el cronómetro
-     * y dejamos las posturas preparadas
-     * para una nueva sesión.
+     * Ahora sí detenemos y reiniciamos
+     * la sesión para dejar la aplicación
+     * preparada para un nuevo START.
+     *
+     * El mensaje final ya ha recibido sus
+     * datos mediante SESSION_FINISHED,
+     * por lo que reiniciar el estado no
+     * afecta a la locución.
      */
 
     detenerCronometro();
 
     reiniciarPosturas();
+
+    reiniciarCiclos();
 
 }
 

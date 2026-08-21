@@ -16,6 +16,16 @@ import { EVENTS } from "./events.js";
 
 let sesionActiva = false;
 
+/*
+ * Identifica la locución actualmente gestionada
+ * por este módulo.
+ *
+ * Permite invalidar correctamente una locución
+ * anterior cuando comienza otra.
+ */
+
+let idLocucion = 0;
+
 
 /* =====================================================
    ELEMENTO DEL MENSAJE EN PANTALLA
@@ -299,6 +309,17 @@ export function hablar(
     mostrarEnPantalla = false
 ) {
 
+    /*
+     * Cada llamada obtiene un identificador único.
+     *
+     * Cuando comienza una nueva locución,
+     * todas las anteriores quedan invalidadas.
+     */
+
+    const idActual =
+        ++idLocucion;
+
+
     return new Promise(resolve => {
 
 
@@ -319,9 +340,9 @@ export function hablar(
 
 
             /*
-             * Si este mensaje debía mostrarse,
-             * nos aseguramos de no dejar ningún
-             * panel visible.
+             * Si esta locución debía mostrar
+             * el panel, no dejamos ningún
+             * mensaje visible.
              */
 
             if (mostrarEnPantalla) {
@@ -343,8 +364,12 @@ export function hablar(
         ============================================== */
 
         /*
-         * Solo puede existir una locución activa
-         * al mismo tiempo.
+         * Solo puede existir una locución
+         * activa al mismo tiempo.
+         *
+         * El identificador anterior ya ha
+         * quedado invalidado al incrementar
+         * idLocucion.
          */
 
         window.speechSynthesis.cancel();
@@ -377,21 +402,41 @@ export function hablar(
 
 
         /* ==============================================
+           COMPROBAR LOCUCIÓN ACTUAL
+        ============================================== */
+
+        function esLocucionActual() {
+
+            return (
+                idActual === idLocucion
+            );
+
+        }
+
+
+        /* ==============================================
            COMIENZO DE LA LOCUCIÓN
         ============================================== */
 
         mensaje.onstart = () => {
 
             /*
+             * Una locución anterior no puede
+             * modificar el panel de la nueva.
+             */
+
+            if (
+                !esLocucionActual()
+            ) {
+
+                return;
+
+            }
+
+
+            /*
              * El mensaje visual solo aparece
-             * si esta locución lo solicita.
-             *
-             * Por tanto:
-             *
-             * Inhala  → no
-             * Exhala  → no
-             * Retén   → no
-             * Mensaje final → sí
+             * cuando esta locución lo solicita.
              */
 
             if (mostrarEnPantalla) {
@@ -412,13 +457,24 @@ export function hablar(
         mensaje.onend = () => {
 
             /*
-             * Si esta locución utilizaba
-             * el panel visual, lo ocultamos.
+             * La Promise de esta locución
+             * siempre debe resolverse.
              */
 
-            if (mostrarEnPantalla) {
+            if (
+                esLocucionActual()
+            ) {
 
-                ocultarMensaje();
+                /*
+                 * Solo la locución actual
+                 * puede modificar el panel.
+                 */
+
+                if (mostrarEnPantalla) {
+
+                    ocultarMensaje();
+
+                }
 
             }
 
@@ -429,7 +485,7 @@ export function hablar(
 
 
         /* ==============================================
-           ERROR DE LOCUCIÓN
+           CANCELACIÓN / ERROR
         ============================================== */
 
         mensaje.onerror = () => {
@@ -440,16 +496,31 @@ export function hablar(
 
 
             /*
-             * Nunca dejamos el diálogo
-             * bloqueado si la voz falla.
+             * Una locución anterior puede
+             * haber sido cancelada porque
+             * comenzó otra.
+             *
+             * En ese caso no debe tocar
+             * el panel de la nueva locución.
              */
 
-            if (mostrarEnPantalla) {
+            if (
+                esLocucionActual()
+            ) {
 
-                ocultarMensaje();
+                if (mostrarEnPantalla) {
+
+                    ocultarMensaje();
+
+                }
 
             }
 
+
+            /*
+             * Incluso en caso de error,
+             * nunca dejamos la Promise pendiente.
+             */
 
             resolve();
 
@@ -467,7 +538,6 @@ export function hablar(
     });
 
 }
-
 
 /* =====================================================
    GESTIÓN DEL FIN DE LA SESIÓN

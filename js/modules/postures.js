@@ -368,22 +368,38 @@ export function siguientePostura() {
      * completamos un ciclo.
      */
 
-    if (
-        siguiente >=
-        imagenesPosturas.length
-    ) {
+if (
+    siguiente >=
+    imagenesPosturas.length
+) {
 
+    const cicloCompletado =
         incrementarCiclos();
+
+
+    /*
+     * Si se ha alcanzado el número máximo
+     * de ciclos, SESSION_COMPLETE ya ha
+     * sido emitido y la sesión se está
+     * finalizando.
+     *
+     * No debemos activar una nueva postura.
+     */
+
+        if (cicloCompletado) {
+
+            return;
+
+        }
+
 
         siguiente = 0;
 
     }
 
-
     activarPostura(
         siguiente
     );
-
 }
 
 

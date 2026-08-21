@@ -6,44 +6,71 @@
  * Autora: África Núñez Bazán
  * =====================================================
  */
+
 "use strict";
 
-import { crearReloj } from "./modules/clock.js";
-import { crearPosturas, siguientePostura } from "./modules/postures.js";
-import { iniciarSesion } from "./modules/session.js";
-import { abrirConfiguracion } from "./modules/settingsDialog.js";
-import { crearToolbar } from "./modules/toolbar.js";
-import { SETTINGS } from "../data/settings.js";
-import { cargarConfiguracion } from "./utils/storage.js";
-import { reiniciarCiclos } from "./modules/cycleCounter.js";
+import { crearReloj }
+    from "./modules/clock.js";
+
+import { crearPosturas }
+    from "./modules/postures.js";
+
+import { crearToolbar }
+    from "./modules/toolbar.js";
+
+import { SETTINGS }
+    from "../data/settings.js";
+
+import { cargarConfiguracion }
+    from "./utils/storage.js";
+
+import { reiniciarCiclos }
+    from "./modules/cycleCounter.js";
+
 import "./modules/speech.js";
 
 
 console.log("APP CARGADA");
 
 
-/* Inicialización de la aplicación */
-document.addEventListener("DOMContentLoaded", () => {
+/* ==========================================
+   INICIALIZACIÓN
+========================================== */
 
-    console.log(document.getElementById("clock-svg"));
-    console.log(document.getElementById("postures"));
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    // Cargar configuración guardada
-    cargarConfiguracion();
+        /*
+         * Cargar la configuración guardada
+         * antes de crear la interfaz.
+         */
 
-    // Crear la interfaz de usuario
-    crearToolbar();
-    crearReloj();
-    crearPosturas();
-   
-    console.log("Antes de reiniciar:", SETTINGS.totalCycles);
+        cargarConfiguracion();
 
-    reiniciarCiclos();
 
-    console.log("Después de reiniciar:", SETTINGS.totalCycles);
-    
+        /*
+         * Crear los elementos principales
+         * de la aplicación.
+         */
 
-});
+        crearToolbar();
+
+        crearReloj();
+
+        crearPosturas();
+
+
+        /*
+         * Preparar el contador para una
+         * nueva sesión.
+         */
+
+        reiniciarCiclos();
+
+    }
+);
+
 
 /* ==========================================
    PWA
@@ -51,28 +78,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 if ("serviceWorker" in navigator) {
 
-    window.addEventListener("load", () => {
+    window.addEventListener(
+        "load",
+        () => {
 
-        navigator.serviceWorker
-            .register("./service-worker.js")
-            .then(registro => {
+            navigator.serviceWorker
+                .register(
+                    "./service-worker.js"
+                )
+                .then(registro => {
 
-                console.log(
-                    "✔ Service Worker registrado:",
-                    registro.scope
-                );
+                    console.log(
+                        "✔ Service Worker registrado:",
+                        registro.scope
+                    );
 
-            })
-            .catch(error => {
+                })
+                .catch(error => {
 
-                console.error(
-                    "✖ Error registrando Service Worker:",
-                    error
-                );
+                    console.error(
+                        "✖ Error registrando Service Worker:",
+                        error
+                    );
 
-            });
+                });
 
-    });
+        }
+    );
 
 }
-

@@ -22,6 +22,15 @@ let mantenerPantallaActiva = false;
 
 let solicitudPendiente = null;
 
+/*
+ * Identifica la solicitud de Wake Lock actual.
+ *
+ * Permite invalidar una solicitud que todavía
+ * esté pendiente cuando la sesión se pausa
+ * o finaliza.
+ */
+let idSolicitud = 0;
+
 
 /* ==========================================
    COMPROBAR DISPONIBILIDAD
@@ -42,6 +51,10 @@ export function wakeLockDisponible() {
 
 export async function solicitarWakeLock() {
 
+    /*
+     * La sesión quiere mantener la pantalla
+     * activa.
+     */
     mantenerPantallaActiva = true;
 
 
@@ -58,25 +71,6 @@ export async function solicitarWakeLock() {
         return false;
 
     }
-
-
-    /*
-     * Información de diagnóstico.
-     */
-
-    console.log(
-        "🔆 Solicitud Wake Lock",
-        {
-            visible:
-                document.visibilityState,
-
-            secure:
-                window.isSecureContext,
-
-            wakeLock:
-                "wakeLock" in navigator
-        }
-    );
 
 
     /*
@@ -128,6 +122,14 @@ export async function solicitarWakeLock() {
 
 
     /* ======================================
+       IDENTIFICAR SOLICITUD
+    ====================================== */
+
+    const idActual =
+        ++idSolicitud;
+
+
+    /* ======================================
        SOLICITAR BLOQUEO
     ====================================== */
 
@@ -145,6 +147,27 @@ export async function solicitarWakeLock() {
                     await navigator.wakeLock.request(
                         "screen"
                     );
+
+
+                /*
+                 * Comprobamos que esta solicitud
+                 * siga siendo válida.
+                 *
+                 * Si la sesión se pausó o terminó
+                 * mientras request() estaba pendiente,
+                 * no conservamos el Wake Lock.
+                 */
+
+                if (
+                    idActual !== idSolicitud ||
+                    !mantenerPantallaActiva
+                ) {
+
+                    await nuevoWakeLock.release();
+
+                    return false;
+
+                }
 
 
                 wakeLock =
@@ -198,7 +221,18 @@ export async function solicitarWakeLock() {
 
             } catch (error) {
 
-                wakeLock = null;
+                /*
+                 * Solo limpiamos la referencia si
+                 * corresponde a la solicitud actual.
+                 */
+
+                if (
+                    idActual === idSolicitud
+                ) {
+
+                    wakeLock = null;
+
+                }
 
 
                 console.error(
@@ -223,11 +257,6 @@ export async function solicitarWakeLock() {
                     error
                 );
 
-
-                /*
-                 * Algunos navegadores pueden
-                 * proporcionar información adicional.
-                 */
 
                 if (
                     error?.name ===
@@ -268,9 +297,27 @@ export async function solicitarWakeLock() {
 
 export async function liberarWakeLock() {
 
+    /*
+     * La sesión ya no quiere mantener
+     * la pantalla activa.
+     */
+
     mantenerPantallaActiva =
         false;
 
+
+    /*
+     * Invalidamos cualquier solicitud
+     * que todavía estuviera pendiente.
+     */
+
+    idSolicitud++;
+
+
+    /*
+     * Si no hay Wake Lock activo,
+     * no hay nada más que liberar.
+     */
 
     if (!wakeLock) {
 
@@ -339,6 +386,11 @@ document.addEventListener(
 
         }
 
+
+        /*
+         * Si la sesión ya no necesita mantener
+         * la pantalla activa, no hacemos nada.
+         */
 
         if (
             !mantenerPantallaActiva

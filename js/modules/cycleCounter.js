@@ -1,7 +1,18 @@
+/**
+ * =====================================================
+ * CONTADOR DE CICLOS
+ * =====================================================
+ */
+
 "use strict";
 
 import { SETTINGS } from "../../data/settings.js";
 import { EVENTS } from "./events.js";
+
+
+/* ==========================================
+   ESTADO
+========================================== */
 
 let ciclos = 0;
 
@@ -19,15 +30,14 @@ function notificarCambioCiclo() {
             EVENTS.CYCLE_CHANGED,
 
             {
-
                 detail: {
 
                     ciclos,
 
-                    total: SETTINGS.totalCycles
+                    total:
+                        SETTINGS.totalCycles
 
                 }
-
             }
 
         )
@@ -51,6 +61,7 @@ export function reiniciarCiclos() {
 
 }
 
+
 export function incrementarCiclos() {
 
     ciclos++;
@@ -58,6 +69,15 @@ export function incrementarCiclos() {
     actualizarContadorVisual();
 
     notificarCambioCiclo();
+
+
+    /*
+     * Si existe un número máximo de ciclos
+     * y se ha alcanzado, notificamos que
+     * la sesión debe finalizar.
+     *
+     * Un valor de 0 significa infinito.
+     */
 
     if (
 
@@ -69,13 +89,21 @@ export function incrementarCiclos() {
 
         document.dispatchEvent(
 
-            new Event(EVENTS.SESSION_COMPLETE)
+            new Event(
+                EVENTS.SESSION_COMPLETE
+            )
 
         );
 
+        return true;
+
     }
 
+
+    return false;
+
 }
+
 
 export function obtenerCiclos() {
 
@@ -91,9 +119,15 @@ export function obtenerCiclos() {
 function actualizarContadorVisual() {
 
     const contador =
-        document.getElementById("cycle-counter");
+        document.getElementById(
+            "cycle-counter"
+        );
 
-    if (!contador) return;
+
+    if (!contador) {
+        return;
+    }
+
 
     contador.textContent =
 
@@ -104,6 +138,7 @@ function actualizarContadorVisual() {
             : `☀ ${ciclos}`;
 
 }
+
 
 export function actualizarContador() {
 
