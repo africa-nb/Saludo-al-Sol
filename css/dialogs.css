@@ -80,7 +80,7 @@
 
     gap: 12px;
 
-    margin-top: 9px;
+    margin-top: 0.75rem;
 
 }
 
@@ -270,6 +270,36 @@ body:has(#session-message.visible)::after {
 
 @media (max-width: 600px) {
 
+    /* ------------------------------------------------------
+       DIÁLOGO DE CONFIGURACIÓN
+       ------------------------------------------------------ */
+
+    #settings-window {
+
+        width:
+            calc(
+                100vw - 32px
+            );
+
+        max-width: 100%;
+
+        max-height:
+            calc(
+                100vh - 32px
+            );
+
+        padding:
+            24px 20px;
+
+        overflow-y: auto;
+
+    }
+
+
+    /* ------------------------------------------------------
+       MENSAJE DE SESIÓN
+       ------------------------------------------------------ */
+
     #session-message {
 
         /*
@@ -364,3 +394,4 @@ body:has(#session-message.visible)::after {
     }
 
 }
+
