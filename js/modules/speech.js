@@ -66,6 +66,11 @@ export function mostrarMensaje(texto) {
         "visible"
     );
 
+
+    actualizarBotonConfiguracion(
+        true
+    );
+
 }
 
 
@@ -97,6 +102,11 @@ export function ocultarMensaje() {
 
     panel.textContent =
         "";
+
+
+    actualizarBotonConfiguracion(
+        false
+    );
 
 }
 
@@ -747,5 +757,28 @@ function crearMensajeFinal(
     ================================================== */
 
     return `Sesión finalizada en ${postura}. Has completado ${saludos} en ${duracion}.`;
+
+}
+
+/* =====================================================
+   actualizarBotonConfiguracion
+===================================================== */
+
+
+function actualizarBotonConfiguracion(
+    deshabilitado
+) {
+
+    const boton =
+        document.getElementById(
+            "btn-settings"
+        );
+
+    if (!boton) {
+        return;
+    }
+
+    boton.disabled =
+        deshabilitado;
 
 }
